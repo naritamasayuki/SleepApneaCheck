@@ -12,6 +12,7 @@ struct SettingsView: View {
     @State private var reminderTime: Date = Date()
     @State private var hasLoadedInitialTime = false
     @State private var legalDocument: LegalDocumentType?
+    @State private var showFeedbackForm = false
 
     var body: some View {
         NavigationStack {
@@ -93,6 +94,32 @@ struct SettingsView: View {
                     Text(String(localized: "settings.section.notification"))
                 }
 
+                // ユーザーフィードバック・バグ報告
+                Section {
+                    Button {
+                        showFeedbackForm = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "bubble.left.and.exclamationmark.bubble.right.fill")
+                                .font(.title3)
+                                .foregroundStyle(.blue)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(String(localized: "settings.feedback.title"))
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+                                Text(String(localized: "settings.feedback.subtitle"))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } header: {
+                    Text(String(localized: "settings.section.support"))
+                }
+
                 // データ管理
                 Section(String(localized: "settings.section.data")) {
                     Button(role: .destructive) {
@@ -150,6 +177,9 @@ struct SettingsView: View {
             }
             .sheet(item: $legalDocument) { doc in
                 LegalDocumentView(documentType: doc)
+            }
+            .sheet(isPresented: $showFeedbackForm) {
+                FeedbackView()
             }
             .confirmationDialog(
                 String(localized: "settings.data.clear_confirm_title"),

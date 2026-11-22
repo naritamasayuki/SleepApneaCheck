@@ -15,6 +15,7 @@ struct ScreeningView: View {
     @State private var weightText = ""
     @State private var essAnswers = Array(repeating: 0, count: EssQuestion.allCases.count)
     @State private var latestResult: ScreeningResult?
+    @State private var showFeedbackForm = false
     @FocusState private var focusedField: FocusField?
 
     private var currentStopBangScore: Int {
@@ -52,11 +53,24 @@ struct ScreeningView: View {
                 }
             }
             .navigationTitle(String(localized: "screening.title"))
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showFeedbackForm = true
+                    } label: {
+                        Image(systemName: "bubble.left.and.exclamationmark.bubble.right")
+                    }
+                    .accessibilityLabel(String(localized: "feedback.title"))
+                }
+            }
             .safeAreaInset(edge: .bottom) {
                 AdBannerView()
             }
             .sheet(item: $latestResult) { result in
                 ScreeningResultView(result: result)
+            }
+            .sheet(isPresented: $showFeedbackForm) {
+                FeedbackView()
             }
         }
     }

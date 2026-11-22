@@ -27,5 +27,9 @@ final class LocalizationTests: XCTestCase {
             XCTAssertFalse(answer.localizedTitle.isEmpty)
             XCTAssertFalse(answer.localizedTitle.hasPrefix("quickcheck.answer."))
         }
+        for category in FeedbackCategory.allCases {
+            XCTAssertFalse(category.localizedTitle.isEmpty)
+            XCTAssertFalse(category.localizedTitle.hasPrefix("feedback.category."))
+        }
     }
 }
