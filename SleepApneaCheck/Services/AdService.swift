@@ -8,9 +8,12 @@ import GoogleMobileAds
 /// Google AdMob 広告の初期化と ATT（トラッキング許可）を管理するサービス
 @MainActor
 final class AdService: ObservableObject {
-    /// Google 公式 iOS テスト用バナー広告ユニット ID
-    /// ※本番リリース時はご自身の AdMob バナーユニット ID に差し替えてください
+    /// バナー広告ユニット ID（DEBUG 時はテスト広告、Release 本番ビルドでは本番 ID を使用）
+    #if DEBUG
     static let bannerAdUnitID = "ca-app-pub-3940256099942544/2435281174"
+    #else
+    static let bannerAdUnitID = "ca-app-pub-4261439423960578/2440707258"
+    #endif
 
     @Published private(set) var isInitialized = false
     private let logger = Logger(subsystem: "com.naritamasayuki.sleepapneacheck", category: "AdService")
