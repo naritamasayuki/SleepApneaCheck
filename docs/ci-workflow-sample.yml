@@ -1,0 +1,32 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build & Unit Tests
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer || true
+
+      - name: Run Xcode Build & Tests
+        run: |
+          DESTINATION=$(xcrun simctl list devices available | grep -m 1 "iPhone" | sed -E 's/.*\(([A-F0-9-]+)\).*/platform=iOS Simulator,id=\1/')
+          xcodebuild test \
+            -project SleepApneaCheck.xcodeproj \
+            -scheme SleepApneaCheck \
+            -destination "$DESTINATION" \
+            -enableCodeCoverage YES \
+            | xcpretty || xcodebuild test \
+            -project SleepApneaCheck.xcodeproj \
+            -scheme SleepApneaCheck \
+            -destination "$DESTINATION"
