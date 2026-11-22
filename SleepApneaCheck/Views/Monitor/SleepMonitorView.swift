@@ -138,6 +138,11 @@ struct SleepMonitorView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "monitor.title"))
+            .safeAreaInset(edge: .bottom) {
+                if !recorderService.isRecording {
+                    AdBannerView()
+                }
+            }
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session, recorderService: recorderService)
             }

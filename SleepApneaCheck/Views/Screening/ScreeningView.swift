@@ -52,6 +52,9 @@ struct ScreeningView: View {
                 }
             }
             .navigationTitle(String(localized: "screening.title"))
+            .safeAreaInset(edge: .bottom) {
+                AdBannerView()
+            }
             .sheet(item: $latestResult) { result in
                 ScreeningResultView(result: result)
             }

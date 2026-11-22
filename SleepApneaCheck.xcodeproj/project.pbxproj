@@ -1,44 +1,46 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	classes = {
-	};
+	classes = {};
 	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07AFA70518D6BF6608AE0E59 /* SleepApneaCheckTests/ScreeningCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D50B4F07C4394C575818593 /* SleepApneaCheckTests/ScreeningCalculatorTests.swift */; };
-		08C733FD5250D1492B04B763 /* SleepApneaCheck/Models/AudioAnalysisModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E1D2A9564C6D1922782B1B /* SleepApneaCheck/Models/AudioAnalysisModels.swift */; };
-		09BD6A085172BEFFED818A41 /* SleepApneaCheck/Models/HistoryRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAA5C9C93232480DC2C628 /* SleepApneaCheck/Models/HistoryRecord.swift */; };
-		09CB1D5E82B259DC1AA4ABC3 /* SleepApneaCheck/Models/QuickCheckModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8025E7F2C2F770B2F4187D /* SleepApneaCheck/Models/QuickCheckModels.swift */; };
-		0CE58A457EA0EE117C19F05E /* SleepApneaCheckTests/LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4B6D37CB04E8AE30A0F6F /* SleepApneaCheckTests/LocalizationTests.swift */; };
-		124854FE21CADFE5D9663811 /* SleepApneaCheck/Views/Components/ScoreGaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80B419CA49FDDA64A766E34 /* SleepApneaCheck/Views/Components/ScoreGaugeView.swift */; };
-		2DB6E55190ADD2F07AE66B7E /* SleepApneaCheck/App/ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB19198DE26077A9C2770A6 /* SleepApneaCheck/App/ContentView.swift */; };
-		2F9EEB217F4A02732E9BB8E8 /* SleepApneaCheck/App/SleepApneaCheckApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2618F9CBC0E16525F818423E /* SleepApneaCheck/App/SleepApneaCheckApp.swift */; };
-		3580C02C690965556BBE7195 /* SleepApneaCheck/Models/ScreeningModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ADA1D62422D76677DF4FAD /* SleepApneaCheck/Models/ScreeningModels.swift */; };
-		3BDF8B59CFE0E0CB08DBF0D5 /* SleepApneaCheck/Services/AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2CFAB5EBD9257605A719AF /* SleepApneaCheck/Services/AudioAnalyzer.swift */; };
-		525257952D17F1CCD580F941 /* SleepApneaCheckTests/AudioAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853A1E336627D98E228EC877 /* SleepApneaCheckTests/AudioAnalyzerTests.swift */; };
-		53322AE5B822033F3F34D2D2 /* SleepApneaCheck/Views/History/HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F79788BEBFF8374A37715D /* SleepApneaCheck/Views/History/HistoryView.swift */; };
-		645F49963515BEB139041552 /* SleepApneaCheckTests/HistoryRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCBFAAD476B560FA4FBEC8B /* SleepApneaCheckTests/HistoryRepositoryTests.swift */; };
-		6721E0D5C5A02C4CD9E5D669 /* SleepApneaCheck/Views/Components/DisclaimerBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D352DF7E7557444A2E06D4DC /* SleepApneaCheck/Views/Components/DisclaimerBanner.swift */; };
-		6B4549560E8BE1C0C3A113C9 /* SleepApneaCheck/Views/Settings/PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B4A150A747BEAF9ECFE6B7 /* SleepApneaCheck/Views/Settings/PaywallView.swift */; };
-		6EC1E324C1F867CF0F554122 /* SleepApneaCheck/Resources/InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B4E25153A60E7D3321CF5A0B /* SleepApneaCheck/Resources/InfoPlist.xcstrings */; };
-		7D11FC212D52D57BD0D33447 /* SleepApneaCheck/Resources/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 29B7298538415A733C7469FA /* SleepApneaCheck/Resources/PrivacyInfo.xcprivacy */; };
-		8008308529304F4C1AB5AC7F /* SleepApneaCheck/Views/Monitor/SleepMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB061CB46E75A8D1B21E6CDF /* SleepApneaCheck/Views/Monitor/SleepMonitorView.swift */; };
-		91961777C27EB2B16033714A /* SleepApneaCheckTests/QuickCheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F520032B72A0C68F5EFE71C3 /* SleepApneaCheckTests/QuickCheckTests.swift */; };
-		A672BCA49E4B0C0DA5BD5BAC /* SleepApneaCheck/Services/HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A876CC10796C222476C186 /* SleepApneaCheck/Services/HistoryRepository.swift */; };
-		AC23EAD1C8B39CC8AFE3874C /* SleepApneaCheck/Resources/Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C212ACB9F46EDE6EE0B64A02 /* SleepApneaCheck/Resources/Localizable.xcstrings */; };
-		AEAB9DE0647645C8837B0C5D /* SleepApneaCheck/Views/Settings/LegalDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B95AB204E86D03F0FC4C745 /* SleepApneaCheck/Views/Settings/LegalDocumentView.swift */; };
-		B2D0E90154BC3472781DDE53 /* SleepApneaCheck/Views/Screening/QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEEAF7EB72D5218270EE03A /* SleepApneaCheck/Views/Screening/QuickCheckView.swift */; };
-		B7D842A4BEC3393E4FCF74B8 /* SleepApneaCheck/Services/AudioRecorderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1DD1962B68BA95847C0C1B /* SleepApneaCheck/Services/AudioRecorderService.swift */; };
-		BAB5CC9E635E33509AF33A6F /* SleepApneaCheck/Views/Monitor/SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071FAB2968E2A5113FC7A6ED /* SleepApneaCheck/Views/Monitor/SessionDetailView.swift */; };
-		BF6E6137E69402DF4CC586A7 /* SleepApneaCheck/Views/Screening/ScreeningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96185D8317D3635065F041E4 /* SleepApneaCheck/Views/Screening/ScreeningView.swift */; };
-		C34ADD725244DCF17048FC48 /* SleepApneaCheck/Views/Screening/ScreeningResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C68C5CDEB233C3183AE225 /* SleepApneaCheck/Views/Screening/ScreeningResultView.swift */; };
-		C4DFEE87B8BA1A5CF2411997 /* SleepApneaCheck/Services/NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D1E0EB59DA701C12C5839 /* SleepApneaCheck/Services/NotificationService.swift */; };
-		CC345EF9C8D752647DFD2CFF /* SleepApneaCheck/Services/SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238B8C8D4B3C568964CA62D0 /* SleepApneaCheck/Services/SubscriptionService.swift */; };
-		D5FDA87E53390BC8780E355B /* SleepApneaCheck/Resources/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 047D444B090221420B360678 /* SleepApneaCheck/Resources/Assets.xcassets */; };
-		DB663BF05B3603F2F8A3B67C /* SleepApneaCheck/Services/ScreeningCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8E338FB36F65051EAC8C8 /* SleepApneaCheck/Services/ScreeningCalculator.swift */; };
-		F87C13FF7EA831740A58192A /* SleepApneaCheck/Views/Settings/SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE023659997802C382C54A8 /* SleepApneaCheck/Views/Settings/SettingsView.swift */; };
+		2F9EEB217F4A02732E9BB8E8 /* SleepApneaCheckApp.swift */ = {isa = PBXBuildFile; fileRef = 2618F9CBC0E16525F818423E /* SleepApneaCheckApp.swift */; };
+		2DB6E55190ADD2F07AE66B7E /* ContentView.swift */ = {isa = PBXBuildFile; fileRef = 0DB19198DE26077A9C2770A6 /* ContentView.swift */; };
+		3580C02C690965556BBE7195 /* ScreeningModels.swift */ = {isa = PBXBuildFile; fileRef = 26ADA1D62422D76677DF4FAD /* ScreeningModels.swift */; };
+		09CB1D5E82B259DC1AA4ABC3 /* QuickCheckModels.swift */ = {isa = PBXBuildFile; fileRef = 3A8025E7F2C2F770B2F4187D /* QuickCheckModels.swift */; };
+		08C733FD5250D1492B04B763 /* AudioAnalysisModels.swift */ = {isa = PBXBuildFile; fileRef = 82E1D2A9564C6D1922782B1B /* AudioAnalysisModels.swift */; };
+		09BD6A085172BEFFED818A41 /* HistoryRecord.swift */ = {isa = PBXBuildFile; fileRef = 76DAA5C9C93232480DC2C628 /* HistoryRecord.swift */; };
+		DB663BF05B3603F2F8A3B67C /* ScreeningCalculator.swift */ = {isa = PBXBuildFile; fileRef = 08D8E338FB36F65051EAC8C8 /* ScreeningCalculator.swift */; };
+		3BDF8B59CFE0E0CB08DBF0D5 /* AudioAnalyzer.swift */ = {isa = PBXBuildFile; fileRef = BC2CFAB5EBD9257605A719AF /* AudioAnalyzer.swift */; };
+		B7D842A4BEC3393E4FCF74B8 /* AudioRecorderService.swift */ = {isa = PBXBuildFile; fileRef = 0A1DD1962B68BA95847C0C1B /* AudioRecorderService.swift */; };
+		A672BCA49E4B0C0DA5BD5BAC /* HistoryRepository.swift */ = {isa = PBXBuildFile; fileRef = A7A876CC10796C222476C186 /* HistoryRepository.swift */; };
+		C4DFEE87B8BA1A5CF2411997 /* NotificationService.swift */ = {isa = PBXBuildFile; fileRef = 4F0D1E0EB59DA701C12C5839 /* NotificationService.swift */; };
+		CC345EF9C8D752647DFD2CFF /* SubscriptionService.swift */ = {isa = PBXBuildFile; fileRef = 238B8C8D4B3C568964CA62D0 /* SubscriptionService.swift */; };
+		44B9D23AF7F90342738CE57E /* AdService.swift */ = {isa = PBXBuildFile; fileRef = 7D407C34BF45E29747E6D0EC /* AdService.swift */; };
+		6721E0D5C5A02C4CD9E5D669 /* DisclaimerBanner.swift */ = {isa = PBXBuildFile; fileRef = D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */; };
+		124854FE21CADFE5D9663811 /* ScoreGaugeView.swift */ = {isa = PBXBuildFile; fileRef = F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */; };
+		7EB5D5DF39A0141BEBC74FE7 /* AdBannerView.swift */ = {isa = PBXBuildFile; fileRef = 087DD18DD2E61E22819726D0 /* AdBannerView.swift */; };
+		BF6E6137E69402DF4CC586A7 /* ScreeningView.swift */ = {isa = PBXBuildFile; fileRef = 96185D8317D3635065F041E4 /* ScreeningView.swift */; };
+		B2D0E90154BC3472781DDE53 /* QuickCheckView.swift */ = {isa = PBXBuildFile; fileRef = CEEEAF7EB72D5218270EE03A /* QuickCheckView.swift */; };
+		C34ADD725244DCF17048FC48 /* ScreeningResultView.swift */ = {isa = PBXBuildFile; fileRef = A5C68C5CDEB233C3183AE225 /* ScreeningResultView.swift */; };
+		8008308529304F4C1AB5AC7F /* SleepMonitorView.swift */ = {isa = PBXBuildFile; fileRef = BB061CB46E75A8D1B21E6CDF /* SleepMonitorView.swift */; };
+		BAB5CC9E635E33509AF33A6F /* SessionDetailView.swift */ = {isa = PBXBuildFile; fileRef = 071FAB2968E2A5113FC7A6ED /* SessionDetailView.swift */; };
+		53322AE5B822033F3F34D2D2 /* HistoryView.swift */ = {isa = PBXBuildFile; fileRef = 98F79788BEBFF8374A37715D /* HistoryView.swift */; };
+		F87C13FF7EA831740A58192A /* SettingsView.swift */ = {isa = PBXBuildFile; fileRef = 2CE023659997802C382C54A8 /* SettingsView.swift */; };
+		6B4549560E8BE1C0C3A113C9 /* PaywallView.swift */ = {isa = PBXBuildFile; fileRef = 41B4A150A747BEAF9ECFE6B7 /* PaywallView.swift */; };
+		AEAB9DE0647645C8837B0C5D /* LegalDocumentView.swift */ = {isa = PBXBuildFile; fileRef = 9B95AB204E86D03F0FC4C745 /* LegalDocumentView.swift */; };
+		D5FDA87E53390BC8780E355B /* Assets.xcassets */ = {isa = PBXBuildFile; fileRef = 047D444B090221420B360678 /* Assets.xcassets */; };
+		AC23EAD1C8B39CC8AFE3874C /* Localizable.xcstrings */ = {isa = PBXBuildFile; fileRef = C212ACB9F46EDE6EE0B64A02 /* Localizable.xcstrings */; };
+		6EC1E324C1F867CF0F554122 /* InfoPlist.xcstrings */ = {isa = PBXBuildFile; fileRef = B4E25153A60E7D3321CF5A0B /* InfoPlist.xcstrings */; };
+		7D11FC212D52D57BD0D33447 /* PrivacyInfo.xcprivacy */ = {isa = PBXBuildFile; fileRef = 29B7298538415A733C7469FA /* PrivacyInfo.xcprivacy */; };
+		07AFA70518D6BF6608AE0E59 /* ScreeningCalculatorTests.swift */ = {isa = PBXBuildFile; fileRef = 7D50B4F07C4394C575818593 /* ScreeningCalculatorTests.swift */; };
+		91961777C27EB2B16033714A /* QuickCheckTests.swift */ = {isa = PBXBuildFile; fileRef = F520032B72A0C68F5EFE71C3 /* QuickCheckTests.swift */; };
+		525257952D17F1CCD580F941 /* AudioAnalyzerTests.swift */ = {isa = PBXBuildFile; fileRef = 853A1E336627D98E228EC877 /* AudioAnalyzerTests.swift */; };
+		645F49963515BEB139041552 /* HistoryRepositoryTests.swift */ = {isa = PBXBuildFile; fileRef = BDCBFAAD476B560FA4FBEC8B /* HistoryRepositoryTests.swift */; };
+		0CE58A457EA0EE117C19F05E /* LocalizationTests.swift */ = {isa = PBXBuildFile; fileRef = 51C4B6D37CB04E8AE30A0F6F /* LocalizationTests.swift */; };
+		4EAEFC19BF7DE6A4E9FDFA1F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 5A41968C4033D1F7A48DD200 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,58 +54,48 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0305B6EDA1CA10511CD69731 /* SleepApneaCheck/Resources/Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SleepApneaCheck/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
 		041295CA8533726A8C7840F2 /* SleepApneaCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SleepApneaCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		047D444B090221420B360678 /* SleepApneaCheck/Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SleepApneaCheck/Resources/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		071FAB2968E2A5113FC7A6ED /* SleepApneaCheck/Views/Monitor/SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Monitor/SessionDetailView.swift; sourceTree = SOURCE_ROOT; };
-		08D8E338FB36F65051EAC8C8 /* SleepApneaCheck/Services/ScreeningCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/ScreeningCalculator.swift; sourceTree = SOURCE_ROOT; };
-		0A1DD1962B68BA95847C0C1B /* SleepApneaCheck/Services/AudioRecorderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/AudioRecorderService.swift; sourceTree = SOURCE_ROOT; };
-		0DB19198DE26077A9C2770A6 /* SleepApneaCheck/App/ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/App/ContentView.swift; sourceTree = SOURCE_ROOT; };
-		238B8C8D4B3C568964CA62D0 /* SleepApneaCheck/Services/SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/SubscriptionService.swift; sourceTree = SOURCE_ROOT; };
-		2618F9CBC0E16525F818423E /* SleepApneaCheck/App/SleepApneaCheckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/App/SleepApneaCheckApp.swift; sourceTree = SOURCE_ROOT; };
-		26ADA1D62422D76677DF4FAD /* SleepApneaCheck/Models/ScreeningModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/ScreeningModels.swift; sourceTree = SOURCE_ROOT; };
-		29B7298538415A733C7469FA /* SleepApneaCheck/Resources/PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SleepApneaCheck/Resources/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
-		2CE023659997802C382C54A8 /* SleepApneaCheck/Views/Settings/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/SettingsView.swift; sourceTree = SOURCE_ROOT; };
-		3A8025E7F2C2F770B2F4187D /* SleepApneaCheck/Models/QuickCheckModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/QuickCheckModels.swift; sourceTree = SOURCE_ROOT; };
-		41B4A150A747BEAF9ECFE6B7 /* SleepApneaCheck/Views/Settings/PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/PaywallView.swift; sourceTree = SOURCE_ROOT; };
-		4F0D1E0EB59DA701C12C5839 /* SleepApneaCheck/Services/NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/NotificationService.swift; sourceTree = SOURCE_ROOT; };
-		51C4B6D37CB04E8AE30A0F6F /* SleepApneaCheckTests/LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/LocalizationTests.swift; sourceTree = SOURCE_ROOT; };
-		76DAA5C9C93232480DC2C628 /* SleepApneaCheck/Models/HistoryRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/HistoryRecord.swift; sourceTree = SOURCE_ROOT; };
-		7D50B4F07C4394C575818593 /* SleepApneaCheckTests/ScreeningCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/ScreeningCalculatorTests.swift; sourceTree = SOURCE_ROOT; };
-		82E1D2A9564C6D1922782B1B /* SleepApneaCheck/Models/AudioAnalysisModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/AudioAnalysisModels.swift; sourceTree = SOURCE_ROOT; };
-		853A1E336627D98E228EC877 /* SleepApneaCheckTests/AudioAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/AudioAnalyzerTests.swift; sourceTree = SOURCE_ROOT; };
-		9512E0C937E83D53A47F0245 /* SleepApneaCheckTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; path = SleepApneaCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		96185D8317D3635065F041E4 /* SleepApneaCheck/Views/Screening/ScreeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/ScreeningView.swift; sourceTree = SOURCE_ROOT; };
-		98F79788BEBFF8374A37715D /* SleepApneaCheck/Views/History/HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/History/HistoryView.swift; sourceTree = SOURCE_ROOT; };
-		9B95AB204E86D03F0FC4C745 /* SleepApneaCheck/Views/Settings/LegalDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/LegalDocumentView.swift; sourceTree = SOURCE_ROOT; };
-		A5C68C5CDEB233C3183AE225 /* SleepApneaCheck/Views/Screening/ScreeningResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/ScreeningResultView.swift; sourceTree = SOURCE_ROOT; };
-		A7A876CC10796C222476C186 /* SleepApneaCheck/Services/HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/HistoryRepository.swift; sourceTree = SOURCE_ROOT; };
-		B4E25153A60E7D3321CF5A0B /* SleepApneaCheck/Resources/InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = SleepApneaCheck/Resources/InfoPlist.xcstrings; sourceTree = SOURCE_ROOT; };
-		BB061CB46E75A8D1B21E6CDF /* SleepApneaCheck/Views/Monitor/SleepMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Monitor/SleepMonitorView.swift; sourceTree = SOURCE_ROOT; };
-		BC2CFAB5EBD9257605A719AF /* SleepApneaCheck/Services/AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/AudioAnalyzer.swift; sourceTree = SOURCE_ROOT; };
-		BDCBFAAD476B560FA4FBEC8B /* SleepApneaCheckTests/HistoryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/HistoryRepositoryTests.swift; sourceTree = SOURCE_ROOT; };
-		C212ACB9F46EDE6EE0B64A02 /* SleepApneaCheck/Resources/Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = SleepApneaCheck/Resources/Localizable.xcstrings; sourceTree = SOURCE_ROOT; };
-		CEEEAF7EB72D5218270EE03A /* SleepApneaCheck/Views/Screening/QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/QuickCheckView.swift; sourceTree = SOURCE_ROOT; };
-		D352DF7E7557444A2E06D4DC /* SleepApneaCheck/Views/Components/DisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/DisclaimerBanner.swift; sourceTree = SOURCE_ROOT; };
-		F520032B72A0C68F5EFE71C3 /* SleepApneaCheckTests/QuickCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/QuickCheckTests.swift; sourceTree = SOURCE_ROOT; };
-		F80B419CA49FDDA64A766E34 /* SleepApneaCheck/Views/Components/ScoreGaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/ScoreGaugeView.swift; sourceTree = SOURCE_ROOT; };
+		9512E0C937E83D53A47F0245 /* SleepApneaCheckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.xctest; includeInIndex = 0; path = SleepApneaCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2618F9CBC0E16525F818423E /* SleepApneaCheckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/App/SleepApneaCheckApp.swift; sourceTree = SOURCE_ROOT; };
+		0DB19198DE26077A9C2770A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/App/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		26ADA1D62422D76677DF4FAD /* ScreeningModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/ScreeningModels.swift; sourceTree = SOURCE_ROOT; };
+		3A8025E7F2C2F770B2F4187D /* QuickCheckModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/QuickCheckModels.swift; sourceTree = SOURCE_ROOT; };
+		82E1D2A9564C6D1922782B1B /* AudioAnalysisModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/AudioAnalysisModels.swift; sourceTree = SOURCE_ROOT; };
+		76DAA5C9C93232480DC2C628 /* HistoryRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Models/HistoryRecord.swift; sourceTree = SOURCE_ROOT; };
+		08D8E338FB36F65051EAC8C8 /* ScreeningCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/ScreeningCalculator.swift; sourceTree = SOURCE_ROOT; };
+		BC2CFAB5EBD9257605A719AF /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/AudioAnalyzer.swift; sourceTree = SOURCE_ROOT; };
+		0A1DD1962B68BA95847C0C1B /* AudioRecorderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/AudioRecorderService.swift; sourceTree = SOURCE_ROOT; };
+		A7A876CC10796C222476C186 /* HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/HistoryRepository.swift; sourceTree = SOURCE_ROOT; };
+		4F0D1E0EB59DA701C12C5839 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/NotificationService.swift; sourceTree = SOURCE_ROOT; };
+		238B8C8D4B3C568964CA62D0 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/SubscriptionService.swift; sourceTree = SOURCE_ROOT; };
+		7D407C34BF45E29747E6D0EC /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/AdService.swift; sourceTree = SOURCE_ROOT; };
+		D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/DisclaimerBanner.swift; sourceTree = SOURCE_ROOT; };
+		F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/ScoreGaugeView.swift; sourceTree = SOURCE_ROOT; };
+		087DD18DD2E61E22819726D0 /* AdBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/AdBannerView.swift; sourceTree = SOURCE_ROOT; };
+		96185D8317D3635065F041E4 /* ScreeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/ScreeningView.swift; sourceTree = SOURCE_ROOT; };
+		CEEEAF7EB72D5218270EE03A /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/QuickCheckView.swift; sourceTree = SOURCE_ROOT; };
+		A5C68C5CDEB233C3183AE225 /* ScreeningResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Screening/ScreeningResultView.swift; sourceTree = SOURCE_ROOT; };
+		BB061CB46E75A8D1B21E6CDF /* SleepMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Monitor/SleepMonitorView.swift; sourceTree = SOURCE_ROOT; };
+		071FAB2968E2A5113FC7A6ED /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Monitor/SessionDetailView.swift; sourceTree = SOURCE_ROOT; };
+		98F79788BEBFF8374A37715D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/History/HistoryView.swift; sourceTree = SOURCE_ROOT; };
+		2CE023659997802C382C54A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/SettingsView.swift; sourceTree = SOURCE_ROOT; };
+		41B4A150A747BEAF9ECFE6B7 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/PaywallView.swift; sourceTree = SOURCE_ROOT; };
+		9B95AB204E86D03F0FC4C745 /* LegalDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Settings/LegalDocumentView.swift; sourceTree = SOURCE_ROOT; };
+		047D444B090221420B360678 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SleepApneaCheck/Resources/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		C212ACB9F46EDE6EE0B64A02 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = SleepApneaCheck/Resources/Localizable.xcstrings; sourceTree = SOURCE_ROOT; };
+		B4E25153A60E7D3321CF5A0B /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = SleepApneaCheck/Resources/InfoPlist.xcstrings; sourceTree = SOURCE_ROOT; };
+		29B7298538415A733C7469FA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SleepApneaCheck/Resources/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
+		0305B6EDA1CA10511CD69731 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SleepApneaCheck/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
+		7D50B4F07C4394C575818593 /* ScreeningCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/ScreeningCalculatorTests.swift; sourceTree = SOURCE_ROOT; };
+		F520032B72A0C68F5EFE71C3 /* QuickCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/QuickCheckTests.swift; sourceTree = SOURCE_ROOT; };
+		853A1E336627D98E228EC877 /* AudioAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/AudioAnalyzerTests.swift; sourceTree = SOURCE_ROOT; };
+		BDCBFAAD476B560FA4FBEC8B /* HistoryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/HistoryRepositoryTests.swift; sourceTree = SOURCE_ROOT; };
+		51C4B6D37CB04E8AE30A0F6F /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheckTests/LocalizationTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		248B5A02F63F99595BFF5B2D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9E6665FD160EAB92EE863B00 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+		9E6665FD160EAB92EE863B00 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (4EAEFC19BF7DE6A4E9FDFA1F /* GoogleMobileAds in Frameworks */, ); runOnlyForDeploymentPostprocessing = 0; };
+		248B5A02F63F99595BFF5B2D /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -125,51 +117,53 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C3F67CBD40D72984D7C61571 /* SleepApneaCheckTests */ = {
-			isa = PBXGroup;
-			children = (
-				7D50B4F07C4394C575818593 /* SleepApneaCheckTests/ScreeningCalculatorTests.swift */,
-				F520032B72A0C68F5EFE71C3 /* SleepApneaCheckTests/QuickCheckTests.swift */,
-				853A1E336627D98E228EC877 /* SleepApneaCheckTests/AudioAnalyzerTests.swift */,
-				BDCBFAAD476B560FA4FBEC8B /* SleepApneaCheckTests/HistoryRepositoryTests.swift */,
-				51C4B6D37CB04E8AE30A0F6F /* SleepApneaCheckTests/LocalizationTests.swift */,
-			);
-			name = SleepApneaCheckTests;
-			sourceTree = "<group>";
-		};
 		EC214C9364A99B707482F7D4 /* SleepApneaCheck */ = {
 			isa = PBXGroup;
 			children = (
-				2618F9CBC0E16525F818423E /* SleepApneaCheck/App/SleepApneaCheckApp.swift */,
-				0DB19198DE26077A9C2770A6 /* SleepApneaCheck/App/ContentView.swift */,
-				26ADA1D62422D76677DF4FAD /* SleepApneaCheck/Models/ScreeningModels.swift */,
-				3A8025E7F2C2F770B2F4187D /* SleepApneaCheck/Models/QuickCheckModels.swift */,
-				82E1D2A9564C6D1922782B1B /* SleepApneaCheck/Models/AudioAnalysisModels.swift */,
-				76DAA5C9C93232480DC2C628 /* SleepApneaCheck/Models/HistoryRecord.swift */,
-				08D8E338FB36F65051EAC8C8 /* SleepApneaCheck/Services/ScreeningCalculator.swift */,
-				BC2CFAB5EBD9257605A719AF /* SleepApneaCheck/Services/AudioAnalyzer.swift */,
-				0A1DD1962B68BA95847C0C1B /* SleepApneaCheck/Services/AudioRecorderService.swift */,
-				A7A876CC10796C222476C186 /* SleepApneaCheck/Services/HistoryRepository.swift */,
-				4F0D1E0EB59DA701C12C5839 /* SleepApneaCheck/Services/NotificationService.swift */,
-				238B8C8D4B3C568964CA62D0 /* SleepApneaCheck/Services/SubscriptionService.swift */,
-				D352DF7E7557444A2E06D4DC /* SleepApneaCheck/Views/Components/DisclaimerBanner.swift */,
-				F80B419CA49FDDA64A766E34 /* SleepApneaCheck/Views/Components/ScoreGaugeView.swift */,
-				96185D8317D3635065F041E4 /* SleepApneaCheck/Views/Screening/ScreeningView.swift */,
-				CEEEAF7EB72D5218270EE03A /* SleepApneaCheck/Views/Screening/QuickCheckView.swift */,
-				A5C68C5CDEB233C3183AE225 /* SleepApneaCheck/Views/Screening/ScreeningResultView.swift */,
-				BB061CB46E75A8D1B21E6CDF /* SleepApneaCheck/Views/Monitor/SleepMonitorView.swift */,
-				071FAB2968E2A5113FC7A6ED /* SleepApneaCheck/Views/Monitor/SessionDetailView.swift */,
-				98F79788BEBFF8374A37715D /* SleepApneaCheck/Views/History/HistoryView.swift */,
-				2CE023659997802C382C54A8 /* SleepApneaCheck/Views/Settings/SettingsView.swift */,
-				41B4A150A747BEAF9ECFE6B7 /* SleepApneaCheck/Views/Settings/PaywallView.swift */,
-				9B95AB204E86D03F0FC4C745 /* SleepApneaCheck/Views/Settings/LegalDocumentView.swift */,
-				047D444B090221420B360678 /* SleepApneaCheck/Resources/Assets.xcassets */,
-				C212ACB9F46EDE6EE0B64A02 /* SleepApneaCheck/Resources/Localizable.xcstrings */,
-				B4E25153A60E7D3321CF5A0B /* SleepApneaCheck/Resources/InfoPlist.xcstrings */,
-				29B7298538415A733C7469FA /* SleepApneaCheck/Resources/PrivacyInfo.xcprivacy */,
-				0305B6EDA1CA10511CD69731 /* SleepApneaCheck/Resources/Info.plist */,
+				2618F9CBC0E16525F818423E /* SleepApneaCheckApp.swift */,
+				0DB19198DE26077A9C2770A6 /* ContentView.swift */,
+				26ADA1D62422D76677DF4FAD /* ScreeningModels.swift */,
+				3A8025E7F2C2F770B2F4187D /* QuickCheckModels.swift */,
+				82E1D2A9564C6D1922782B1B /* AudioAnalysisModels.swift */,
+				76DAA5C9C93232480DC2C628 /* HistoryRecord.swift */,
+				08D8E338FB36F65051EAC8C8 /* ScreeningCalculator.swift */,
+				BC2CFAB5EBD9257605A719AF /* AudioAnalyzer.swift */,
+				0A1DD1962B68BA95847C0C1B /* AudioRecorderService.swift */,
+				A7A876CC10796C222476C186 /* HistoryRepository.swift */,
+				4F0D1E0EB59DA701C12C5839 /* NotificationService.swift */,
+				238B8C8D4B3C568964CA62D0 /* SubscriptionService.swift */,
+				7D407C34BF45E29747E6D0EC /* AdService.swift */,
+				D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */,
+				F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */,
+				087DD18DD2E61E22819726D0 /* AdBannerView.swift */,
+				96185D8317D3635065F041E4 /* ScreeningView.swift */,
+				CEEEAF7EB72D5218270EE03A /* QuickCheckView.swift */,
+				A5C68C5CDEB233C3183AE225 /* ScreeningResultView.swift */,
+				BB061CB46E75A8D1B21E6CDF /* SleepMonitorView.swift */,
+				071FAB2968E2A5113FC7A6ED /* SessionDetailView.swift */,
+				98F79788BEBFF8374A37715D /* HistoryView.swift */,
+				2CE023659997802C382C54A8 /* SettingsView.swift */,
+				41B4A150A747BEAF9ECFE6B7 /* PaywallView.swift */,
+				9B95AB204E86D03F0FC4C745 /* LegalDocumentView.swift */,
+				047D444B090221420B360678 /* Assets.xcassets */,
+				C212ACB9F46EDE6EE0B64A02 /* Localizable.xcstrings */,
+				B4E25153A60E7D3321CF5A0B /* InfoPlist.xcstrings */,
+				29B7298538415A733C7469FA /* PrivacyInfo.xcprivacy */,
+				0305B6EDA1CA10511CD69731 /* Info.plist */,
 			);
 			name = SleepApneaCheck;
+			sourceTree = "<group>";
+		};
+		C3F67CBD40D72984D7C61571 /* SleepApneaCheckTests */ = {
+			isa = PBXGroup;
+			children = (
+				7D50B4F07C4394C575818593 /* ScreeningCalculatorTests.swift */,
+				F520032B72A0C68F5EFE71C3 /* QuickCheckTests.swift */,
+				853A1E336627D98E228EC877 /* AudioAnalyzerTests.swift */,
+				BDCBFAAD476B560FA4FBEC8B /* HistoryRepositoryTests.swift */,
+				51C4B6D37CB04E8AE30A0F6F /* LocalizationTests.swift */,
+			);
+			name = SleepApneaCheckTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,34 +171,30 @@
 /* Begin PBXNativeTarget section */
 		498972338201D323AA57707F /* SleepApneaCheck */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5505F9AF814A7F0992DE2402 /* Build configuration list for PBXNativeTarget "SleepApneaCheck" */;
+			buildConfigurationList = 5505F9AF814A7F0992DE2402;
 			buildPhases = (
 				1E4E02189D7B030815F3CED6 /* Sources */,
 				9E6665FD160EAB92EE863B00 /* Frameworks */,
 				A5D299DA246C639B4F87BE6C /* Resources */,
 			);
-			buildRules = (
-			);
-			dependencies = (
-			);
+			buildRules = ();
+			dependencies = ();
 			name = SleepApneaCheck;
+			packageProductDependencies = (5A41968C4033D1F7A48DD200 /* GoogleMobileAds */, );
 			productName = SleepApneaCheck;
 			productReference = 041295CA8533726A8C7840F2 /* SleepApneaCheck.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EA6FA019344BA2DA01CA9292 /* SleepApneaCheckTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E5A230C5C352779E4F6499D2 /* Build configuration list for PBXNativeTarget "SleepApneaCheckTests" */;
+			buildConfigurationList = E5A230C5C352779E4F6499D2;
 			buildPhases = (
 				D09BB15ACB6CA15F8C89C458 /* Sources */,
 				248B5A02F63F99595BFF5B2D /* Frameworks */,
 				52394AD00436135AC129D966 /* Resources */,
 			);
-			buildRules = (
-			);
-			dependencies = (
-				BE5EB07F8419F29F5E649C20 /* PBXTargetDependency */,
-			);
+			buildRules = ();
+			dependencies = (BE5EB07F8419F29F5E649C20);
 			name = SleepApneaCheckTests;
 			productName = SleepApneaCheckTests;
 			productReference = 9512E0C937E83D53A47F0245 /* SleepApneaCheckTests.xctest */;
@@ -215,20 +205,13 @@
 /* Begin PBXProject section */
 		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-			};
-			buildConfigurationList = 7EF2517A8FE63F4681EC5EEA /* Build configuration list for PBXProject "SleepApneaCheck" */;
+			buildConfigurationList = 7EF2517A8FE63F4681EC5EEA;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				ja,
-				"zh-Hans",
-				"zh-Hant",
-				Base,
-			);
+			knownRegions = (en, ja, "zh-Hans", "zh-Hant", Base);
 			mainGroup = 518DA81DB9B99529C0C0AEBE;
+			packageReferences = (573D3F9FA09DF6D0D8C0FCCA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */, );
 			productRefGroup = 547D009064F7C3F13BEF3460 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -240,22 +223,21 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		52394AD00436135AC129D966 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A5D299DA246C639B4F87BE6C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5FDA87E53390BC8780E355B /* SleepApneaCheck/Resources/Assets.xcassets in Resources */,
-				AC23EAD1C8B39CC8AFE3874C /* SleepApneaCheck/Resources/Localizable.xcstrings in Resources */,
-				6EC1E324C1F867CF0F554122 /* SleepApneaCheck/Resources/InfoPlist.xcstrings in Resources */,
-				7D11FC212D52D57BD0D33447 /* SleepApneaCheck/Resources/PrivacyInfo.xcprivacy in Resources */,
+				D5FDA87E53390BC8780E355B /* Assets.xcassets */,
+				AC23EAD1C8B39CC8AFE3874C /* Localizable.xcstrings */,
+				6EC1E324C1F867CF0F554122 /* InfoPlist.xcstrings */,
+				7D11FC212D52D57BD0D33447 /* PrivacyInfo.xcprivacy */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52394AD00436135AC129D966 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
@@ -265,29 +247,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F9EEB217F4A02732E9BB8E8 /* SleepApneaCheck/App/SleepApneaCheckApp.swift in Sources */,
-				2DB6E55190ADD2F07AE66B7E /* SleepApneaCheck/App/ContentView.swift in Sources */,
-				3580C02C690965556BBE7195 /* SleepApneaCheck/Models/ScreeningModels.swift in Sources */,
-				09CB1D5E82B259DC1AA4ABC3 /* SleepApneaCheck/Models/QuickCheckModels.swift in Sources */,
-				08C733FD5250D1492B04B763 /* SleepApneaCheck/Models/AudioAnalysisModels.swift in Sources */,
-				09BD6A085172BEFFED818A41 /* SleepApneaCheck/Models/HistoryRecord.swift in Sources */,
-				DB663BF05B3603F2F8A3B67C /* SleepApneaCheck/Services/ScreeningCalculator.swift in Sources */,
-				3BDF8B59CFE0E0CB08DBF0D5 /* SleepApneaCheck/Services/AudioAnalyzer.swift in Sources */,
-				B7D842A4BEC3393E4FCF74B8 /* SleepApneaCheck/Services/AudioRecorderService.swift in Sources */,
-				A672BCA49E4B0C0DA5BD5BAC /* SleepApneaCheck/Services/HistoryRepository.swift in Sources */,
-				C4DFEE87B8BA1A5CF2411997 /* SleepApneaCheck/Services/NotificationService.swift in Sources */,
-				CC345EF9C8D752647DFD2CFF /* SleepApneaCheck/Services/SubscriptionService.swift in Sources */,
-				6721E0D5C5A02C4CD9E5D669 /* SleepApneaCheck/Views/Components/DisclaimerBanner.swift in Sources */,
-				124854FE21CADFE5D9663811 /* SleepApneaCheck/Views/Components/ScoreGaugeView.swift in Sources */,
-				BF6E6137E69402DF4CC586A7 /* SleepApneaCheck/Views/Screening/ScreeningView.swift in Sources */,
-				B2D0E90154BC3472781DDE53 /* SleepApneaCheck/Views/Screening/QuickCheckView.swift in Sources */,
-				C34ADD725244DCF17048FC48 /* SleepApneaCheck/Views/Screening/ScreeningResultView.swift in Sources */,
-				8008308529304F4C1AB5AC7F /* SleepApneaCheck/Views/Monitor/SleepMonitorView.swift in Sources */,
-				BAB5CC9E635E33509AF33A6F /* SleepApneaCheck/Views/Monitor/SessionDetailView.swift in Sources */,
-				53322AE5B822033F3F34D2D2 /* SleepApneaCheck/Views/History/HistoryView.swift in Sources */,
-				F87C13FF7EA831740A58192A /* SleepApneaCheck/Views/Settings/SettingsView.swift in Sources */,
-				6B4549560E8BE1C0C3A113C9 /* SleepApneaCheck/Views/Settings/PaywallView.swift in Sources */,
-				AEAB9DE0647645C8837B0C5D /* SleepApneaCheck/Views/Settings/LegalDocumentView.swift in Sources */,
+				2F9EEB217F4A02732E9BB8E8 /* SleepApneaCheckApp.swift */,
+				2DB6E55190ADD2F07AE66B7E /* ContentView.swift */,
+				3580C02C690965556BBE7195 /* ScreeningModels.swift */,
+				09CB1D5E82B259DC1AA4ABC3 /* QuickCheckModels.swift */,
+				08C733FD5250D1492B04B763 /* AudioAnalysisModels.swift */,
+				09BD6A085172BEFFED818A41 /* HistoryRecord.swift */,
+				DB663BF05B3603F2F8A3B67C /* ScreeningCalculator.swift */,
+				3BDF8B59CFE0E0CB08DBF0D5 /* AudioAnalyzer.swift */,
+				B7D842A4BEC3393E4FCF74B8 /* AudioRecorderService.swift */,
+				A672BCA49E4B0C0DA5BD5BAC /* HistoryRepository.swift */,
+				C4DFEE87B8BA1A5CF2411997 /* NotificationService.swift */,
+				CC345EF9C8D752647DFD2CFF /* SubscriptionService.swift */,
+				44B9D23AF7F90342738CE57E /* AdService.swift */,
+				6721E0D5C5A02C4CD9E5D669 /* DisclaimerBanner.swift */,
+				124854FE21CADFE5D9663811 /* ScoreGaugeView.swift */,
+				7EB5D5DF39A0141BEBC74FE7 /* AdBannerView.swift */,
+				BF6E6137E69402DF4CC586A7 /* ScreeningView.swift */,
+				B2D0E90154BC3472781DDE53 /* QuickCheckView.swift */,
+				C34ADD725244DCF17048FC48 /* ScreeningResultView.swift */,
+				8008308529304F4C1AB5AC7F /* SleepMonitorView.swift */,
+				BAB5CC9E635E33509AF33A6F /* SessionDetailView.swift */,
+				53322AE5B822033F3F34D2D2 /* HistoryView.swift */,
+				F87C13FF7EA831740A58192A /* SettingsView.swift */,
+				6B4549560E8BE1C0C3A113C9 /* PaywallView.swift */,
+				AEAB9DE0647645C8837B0C5D /* LegalDocumentView.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,11 +279,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07AFA70518D6BF6608AE0E59 /* SleepApneaCheckTests/ScreeningCalculatorTests.swift in Sources */,
-				91961777C27EB2B16033714A /* SleepApneaCheckTests/QuickCheckTests.swift in Sources */,
-				525257952D17F1CCD580F941 /* SleepApneaCheckTests/AudioAnalyzerTests.swift in Sources */,
-				645F49963515BEB139041552 /* SleepApneaCheckTests/HistoryRepositoryTests.swift in Sources */,
-				0CE58A457EA0EE117C19F05E /* SleepApneaCheckTests/LocalizationTests.swift in Sources */,
+				07AFA70518D6BF6608AE0E59 /* ScreeningCalculatorTests.swift */,
+				91961777C27EB2B16033714A /* QuickCheckTests.swift */,
+				525257952D17F1CCD580F941 /* AudioAnalyzerTests.swift */,
+				645F49963515BEB139041552 /* HistoryRepositoryTests.swift */,
+				0CE58A457EA0EE117C19F05E /* LocalizationTests.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,12 +298,77 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		C19BB360D63F1BA9F02BAB59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		88A29AB70C762FCDF6D9A1D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		91B8F6FB95707A0AB87A87F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4KR684T6KV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BB071F776B40F4837F61A6A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4KR684T6KV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		1CD6F2168A0DAE0628DDD709 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -334,7 +383,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -344,108 +393,32 @@
 			};
 			name = Release;
 		};
-		88A29AB70C762FCDF6D9A1D3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		91B8F6FB95707A0AB87A87F1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4KR684T6KV;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		BB071F776B40F4837F61A6A3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4KR684T6KV;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		C19BB360D63F1BA9F02BAB59 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5505F9AF814A7F0992DE2402 /* Build configuration list for PBXNativeTarget "SleepApneaCheck" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				91B8F6FB95707A0AB87A87F1 /* Debug */,
-				BB071F776B40F4837F61A6A3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7EF2517A8FE63F4681EC5EEA /* Build configuration list for PBXProject "SleepApneaCheck" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C19BB360D63F1BA9F02BAB59 /* Debug */,
-				88A29AB70C762FCDF6D9A1D3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E5A230C5C352779E4F6499D2 /* Build configuration list for PBXNativeTarget "SleepApneaCheckTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1CD6F2168A0DAE0628DDD709 /* Debug */,
-				804C6C12DD7ADD7F19F0611C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
+		7EF2517A8FE63F4681EC5EEA = {isa = XCConfigurationList; buildConfigurations = (C19BB360D63F1BA9F02BAB59, 88A29AB70C762FCDF6D9A1D3); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		5505F9AF814A7F0992DE2402 = {isa = XCConfigurationList; buildConfigurations = (91B8F6FB95707A0AB87A87F1, BB071F776B40F4837F61A6A3); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		E5A230C5C352779E4F6499D2 = {isa = XCConfigurationList; buildConfigurations = (1CD6F2168A0DAE0628DDD709, 804C6C12DD7ADD7F19F0611C); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		573D3F9FA09DF6D0D8C0FCCA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A41968C4033D1F7A48DD200 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 573D3F9FA09DF6D0D8C0FCCA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 }

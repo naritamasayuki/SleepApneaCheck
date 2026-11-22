@@ -43,6 +43,10 @@ struct PaywallView: View {
                             icon: "doc.text.fill",
                             title: String(localized: "paywall.feature.doctor_report")
                         )
+                        featureRow(
+                            icon: "nosign",
+                            title: String(localized: "paywall.feature.ad_free")
+                        )
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)

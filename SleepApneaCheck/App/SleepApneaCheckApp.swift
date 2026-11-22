@@ -93,6 +93,7 @@ struct SleepApneaCheckApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var subscriptionService = SubscriptionService()
     @StateObject private var notificationService = NotificationService()
+    @StateObject private var adService = AdService()
 
     var body: some Scene {
         WindowGroup {
@@ -100,6 +101,10 @@ struct SleepApneaCheckApp: App {
                 .environmentObject(appState)
                 .environmentObject(subscriptionService)
                 .environmentObject(notificationService)
+                .environmentObject(adService)
+                .task {
+                    await adService.configureIfNeeded()
+                }
         }
     }
 }

@@ -44,6 +44,9 @@ struct HistoryView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "history.title"))
+            .safeAreaInset(edge: .bottom) {
+                AdBannerView()
+            }
             .sheet(item: $selectedScreening) { result in
                 ScreeningResultView(result: result)
             }
