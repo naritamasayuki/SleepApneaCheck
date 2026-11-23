@@ -1,8 +1,10 @@
+import StoreKit
 import SwiftUI
 
 /// 問診スクリーニング画面（簡易判定 / 詳細問診 STOP-Bang + ESS 切り替え）
 struct ScreeningView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.requestReview) private var requestReview
 
     private enum FocusField {
         case height
@@ -212,6 +214,9 @@ struct ScreeningView: View {
         )
         appState.addScreeningResult(result)
         latestResult = result
+        if ReviewPromptService.recordActionAndShouldPrompt() {
+            requestReview()
+        }
     }
 
     private func resetForm() {

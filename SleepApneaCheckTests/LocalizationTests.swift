@@ -37,5 +37,9 @@ final class LocalizationTests: XCTestCase {
             XCTAssertFalse(good.localizedDescription.isEmpty)
             XCTAssertFalse(good.localizedDescription.hasPrefix("goods."))
         }
+        for tag in SleepCareTag.allCases {
+            XCTAssertFalse(tag.localizedTitle.isEmpty)
+            XCTAssertFalse(tag.localizedTitle.hasPrefix("tag."))
+        }
     }
 }

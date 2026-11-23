@@ -72,6 +72,42 @@ enum AudioSensitivity: String, Codable, CaseIterable, Identifiable, Sendable {
     }
 }
 
+/// 睡眠時の状況・対策グッズタグ（効果比較用）
+enum SleepCareTag: String, Codable, CaseIterable, Identifiable, Sendable {
+    case sidePillow
+    case mouthTape
+    case nasalStrips
+    case mouthpiece
+    case alcohol
+    case heavyFatigue
+
+    var id: String { rawValue }
+
+    /// ローカライズされたタグ名
+    var localizedTitle: String {
+        switch self {
+        case .sidePillow: return String(localized: "tag.side_pillow")
+        case .mouthTape: return String(localized: "tag.mouth_tape")
+        case .nasalStrips: return String(localized: "tag.nasal_strips")
+        case .mouthpiece: return String(localized: "tag.mouthpiece")
+        case .alcohol: return String(localized: "tag.alcohol")
+        case .heavyFatigue: return String(localized: "tag.heavy_fatigue")
+        }
+    }
+
+    /// SF Symbols アイコン名
+    var symbolName: String {
+        switch self {
+        case .sidePillow: return "bed.double.fill"
+        case .mouthTape: return "bandage.fill"
+        case .nasalStrips: return "wind"
+        case .mouthpiece: return "mouth.fill"
+        case .alcohol: return "wineglass.fill"
+        case .heavyFatigue: return "battery.25"
+        }
+    }
+}
+
 /// 睡眠録音セッションの解析結果
 struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     let id: UUID
@@ -85,6 +121,29 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     let apneaPauseCount: Int
     let longestPauseSeconds: TimeInterval
     let isSimulated: Bool
+    /// 就寝時の対策・状況タグ
+    var tags: [SleepCareTag]
+
+    enum CodingKeys: String, CodingKey {
+        case id, recordedAt, durationSeconds, audioFileName, events, normalizedLevels
+        case snoringDurationSeconds, apneaPauseCount, longestPauseSeconds, isSimulated, tags
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        recordedAt = try container.decode(Date.self, forKey: .recordedAt)
+        durationSeconds = try container.decode(TimeInterval.self, forKey: .durationSeconds)
+        audioFileName = try container.decodeIfPresent(String.self, forKey: .audioFileName)
+        events = try container.decode([SleepAudioEvent].self, forKey: .events)
+        normalizedLevels = try container.decode([Double].self, forKey: .normalizedLevels)
+        snoringDurationSeconds = try container.decode(TimeInterval.self, forKey: .snoringDurationSeconds)
+        apneaPauseCount = try container.decode(Int.self, forKey: .apneaPauseCount)
+        longestPauseSeconds = try container.decode(TimeInterval.self, forKey: .longestPauseSeconds)
+        isSimulated = try container.decode(Bool.self, forKey: .isSimulated)
+        // 旧バージョン保存データとの後方互換性を維持
+        tags = try container.decodeIfPresent([SleepCareTag].self, forKey: .tags) ?? []
+    }
 
     /// 1時間あたりの推定無呼吸候補イベント数（簡易指標）
     var estimatedEventsPerHour: Double {
@@ -120,7 +179,8 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         snoringDurationSeconds: TimeInterval,
         apneaPauseCount: Int,
         longestPauseSeconds: TimeInterval,
-        isSimulated: Bool = false
+        isSimulated: Bool = false,
+        tags: [SleepCareTag] = []
     ) {
         self.id = id
         self.recordedAt = recordedAt
@@ -132,5 +192,6 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         self.apneaPauseCount = apneaPauseCount
         self.longestPauseSeconds = longestPauseSeconds
         self.isSimulated = isSimulated
+        self.tags = tags
     }
 }

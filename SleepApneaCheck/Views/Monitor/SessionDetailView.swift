@@ -9,6 +9,7 @@ struct SessionDetailView: View {
     @ObservedObject var recorderService: AudioRecorderService
 
     @State private var playbackError: String?
+    @State private var editableTags: [SleepCareTag] = []
 
     private var audioURL: URL? {
         guard let fileName = session.audioFileName else { return nil }
@@ -115,33 +116,70 @@ struct SessionDetailView: View {
                         .buttonStyle(.borderedProminent)
                     }
 
-                    // 検出イベントリスト
+                    // 対策・状況タグ（後から編集可能）
+                    SleepCareTagPicker(selectedTags: $editableTags)
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .onChange(of: editableTags) { _, newValue in
+                            appState.updateAudioSessionTags(sessionID: session.id, tags: newValue)
+                        }
+
+                    // 検出イベントリスト（録音ファイルがある場合はタップで5秒前からピンポイント再生）
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(String(localized: "session.events.title"))
-                            .font(.headline)
+                        HStack {
+                            Text(String(localized: "session.events.title"))
+                                .font(.headline)
+                            Spacer()
+                            if let url = audioURL, FileManager.default.fileExists(atPath: url.path) {
+                                Text(String(localized: "session.events.tap_to_play"))
+                                    .font(.caption2)
+                                    .foregroundStyle(.blue)
+                            }
+                        }
 
                         if session.events.isEmpty {
                             Text(String(localized: "session.events.empty"))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         } else {
+                            let hasAudioFile = audioURL.map { FileManager.default.fileExists(atPath: $0.path) } ?? false
                             ForEach(session.events) { event in
-                                HStack {
-                                    Image(systemName: event.type == .apneaPause ? "pause.circle.fill" : "waveform")
-                                        .foregroundStyle(event.type == .apneaPause ? .red : .orange)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(event.type.localizedTitle)
-                                            .font(.subheadline.bold())
-                                        Text(formatOffset(event.startOffsetSeconds))
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
+                                let isThisEventPlaying = recorderService.isPlaying && recorderService.activeEventID == event.id
+                                Button {
+                                    guard hasAudioFile, let url = audioURL else { return }
+                                    do {
+                                        let seekStart = max(0, event.startOffsetSeconds - 5.0)
+                                        try recorderService.play(url: url, startingAt: seekStart, eventID: event.id)
+                                    } catch {
+                                        playbackError = error.localizedDescription
                                     }
-                                    Spacer()
-                                    Text(String(format: "%.0fs", event.durationSeconds))
-                                        .font(.subheadline.monospacedDigit())
-                                        .foregroundStyle(.secondary)
+                                } label: {
+                                    HStack {
+                                        Image(systemName: event.type == .apneaPause ? "pause.circle.fill" : "waveform")
+                                            .foregroundStyle(event.type == .apneaPause ? .red : .orange)
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(event.type.localizedTitle)
+                                                .font(.subheadline.bold())
+                                                .foregroundStyle(.primary)
+                                            Text(formatOffset(event.startOffsetSeconds))
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Text(String(format: "%.0fs", event.durationSeconds))
+                                            .font(.subheadline.monospacedDigit())
+                                            .foregroundStyle(.secondary)
+                                        if hasAudioFile {
+                                            Image(systemName: isThisEventPlaying ? "stop.circle.fill" : "play.circle")
+                                                .foregroundStyle(isThisEventPlaying ? .red : .blue)
+                                                .font(.title3)
+                                        }
+                                    }
+                                    .padding(.vertical, 4)
                                 }
-                                .padding(.vertical, 4)
+                                .buttonStyle(.plain)
+                                .disabled(!hasAudioFile)
                                 Divider()
                             }
                         }
@@ -165,6 +203,9 @@ struct SessionDetailView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "session.detail.title"))
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                editableTags = session.tags
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "common.done")) {

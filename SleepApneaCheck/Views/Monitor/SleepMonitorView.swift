@@ -1,13 +1,16 @@
+import StoreKit
 import SwiftUI
 import UIKit
 
 /// 睡眠音声の録音・簡易解析画面
 struct SleepMonitorView: View {
     @EnvironmentObject private var appState: AppState
+    @Environment(\.requestReview) private var requestReview
 
     @StateObject private var recorderService = AudioRecorderService()
     @State private var isAnalyzing = false
     @State private var selectedSession: SleepAudioSession?
+    @State private var selectedTags: [SleepCareTag] = []
     @State private var recorderErrorMessage: String?
     @State private var showPermissionSettingsAlert = false
 
@@ -71,6 +74,12 @@ struct SleepMonitorView: View {
                     .padding(20)
                     .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                    // 就寝時の対策・状況タグ選択
+                    SleepCareTagPicker(selectedTags: $selectedTags)
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     // デモ・シミュレーション解析（実機マイクが使えない環境でも動作確認可能）
                     if !recorderService.isRecording && !isAnalyzing {
@@ -159,23 +168,32 @@ struct SleepMonitorView: View {
     private func analyzeRecording(at url: URL) async {
         isAnalyzing = true
         let sensitivity = appState.sensitivity
+        let tagsToAttach = selectedTags
         defer { isAnalyzing = false }
 
         do {
-            let session = try await Task.detached(priority: .userInitiated) {
+            var session = try await Task.detached(priority: .userInitiated) {
                 try AudioAnalyzer.analyzeFile(at: url, sensitivity: sensitivity)
             }.value
+            session.tags = tagsToAttach
             appState.addAudioSession(session)
             selectedSession = session
+            if ReviewPromptService.recordActionAndShouldPrompt() {
+                requestReview()
+            }
         } catch {
             recorderErrorMessage = error.localizedDescription
         }
     }
 
     private func runSimulatedAnalysis() {
-        let session = AudioAnalyzer.generateSimulatedSession(sensitivity: appState.sensitivity)
+        var session = AudioAnalyzer.generateSimulatedSession(sensitivity: appState.sensitivity)
+        session.tags = selectedTags
         appState.addAudioSession(session)
         selectedSession = session
+        if ReviewPromptService.recordActionAndShouldPrompt() {
+            requestReview()
+        }
     }
 
     private func formattedDuration(_ seconds: TimeInterval) -> String {

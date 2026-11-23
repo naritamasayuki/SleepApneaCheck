@@ -49,6 +49,13 @@ final class AppState: ObservableObject {
         persistHistory()
     }
 
+    /// 既存セッションの対策タグを更新する
+    func updateAudioSessionTags(sessionID: UUID, tags: [SleepCareTag]) {
+        guard let idx = audioSessions.firstIndex(where: { $0.id == sessionID }) else { return }
+        audioSessions[idx].tags = tags
+        persistHistory()
+    }
+
     /// 問診結果を削除する
     func deleteScreening(at offsets: IndexSet) {
         screenings.remove(atOffsets: offsets)
@@ -93,6 +100,7 @@ struct SleepApneaCheckApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var notificationService = NotificationService()
     @StateObject private var adService = AdService()
+    @StateObject private var healthKitService = HealthKitService()
 
     var body: some Scene {
         WindowGroup {
@@ -100,6 +108,7 @@ struct SleepApneaCheckApp: App {
                 .environmentObject(appState)
                 .environmentObject(notificationService)
                 .environmentObject(adService)
+                .environmentObject(healthKitService)
                 .task {
                     await adService.configureIfNeeded()
                 }

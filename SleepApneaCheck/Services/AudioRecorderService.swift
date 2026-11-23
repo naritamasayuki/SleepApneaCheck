@@ -32,6 +32,7 @@ enum AudioRecorderError: LocalizedError {
 final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published private(set) var isRecording = false
     @Published private(set) var isPlaying = false
+    @Published private(set) var activeEventID: UUID?
     @Published private(set) var elapsedSeconds: TimeInterval = 0
     @Published private(set) var currentMeterLevel: Double = 0.0
     @Published private(set) var permissionGranted: Bool?
@@ -127,10 +128,21 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
 
     /// 指定された録音ファイルを再生する
     func togglePlayback(url: URL) throws {
-        if isPlaying {
+        if isPlaying && activeEventID == nil {
             stopPlayback()
             return
         }
+        try play(url: url, startingAt: 0, eventID: nil)
+    }
+
+    /// 指定秒数からピンポイント頭出し再生を行う（例：イベント開始5秒前）
+    func play(url: URL, startingAt offsetSeconds: TimeInterval, eventID: UUID? = nil) throws {
+        if isPlaying && activeEventID == eventID && eventID != nil {
+            stopPlayback()
+            return
+        }
+
+        stopPlayback()
 
         guard FileManager.default.fileExists(atPath: url.path) else {
             throw AudioRecorderError.noRecordingFile
@@ -143,8 +155,12 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
 
             let audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer.delegate = self
+            audioPlayer.prepareToPlay()
+            let clampedOffset = max(0, min(offsetSeconds, max(0, audioPlayer.duration - 0.5)))
+            audioPlayer.currentTime = clampedOffset
             audioPlayer.play()
             player = audioPlayer
+            activeEventID = eventID
             isPlaying = true
         } catch {
             logger.error("音声再生失敗: \(error.localizedDescription)")
@@ -156,12 +172,14 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
     func stopPlayback() {
         player?.stop()
         player = nil
+        activeEventID = nil
         isPlaying = false
     }
 
     nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         Task { @MainActor [weak self] in
             self?.isPlaying = false
+            self?.activeEventID = nil
             self?.player = nil
         }
     }

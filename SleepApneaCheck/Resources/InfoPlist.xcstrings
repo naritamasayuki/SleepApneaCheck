@@ -1,122 +1,150 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleDisplayName" : {
-      "comment" : "Bundle display name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SleepApnea Check"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleDisplayName": {
+      "comment": "Bundle display name",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SleepApnea Check"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠時無呼吸チェック"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠時無呼吸チェック"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠呼吸暂停检测"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠呼吸暂停检测"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠呼吸中止檢測"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠呼吸中止檢測"
           }
         }
       }
     },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SleepApnea Check"
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SleepApnea Check"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠時無呼吸チェック"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠時無呼吸チェック"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠呼吸暂停检测"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠呼吸暂停检测"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠呼吸中止檢測"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠呼吸中止檢測"
           }
         }
       }
     },
-    "NSMicrophoneUsageDescription" : {
-      "comment" : "Privacy - Microphone Usage Description",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Microphone access is used to record sleep sounds and analyze snoring or breathing pause patterns."
+    "NSHealthShareUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reads recent sleep duration and blood oxygen (SpO2) from Apple Health to display alongside your sleep check history."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠中のいびきや無呼吸の傾向を簡易解析するため、マイクによる録音を使用します。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple ヘルスケアに記録された睡眠時間や血中酸素（SpO2）を読み込み、無呼吸チェック履歴とあわせて表示するために使用します。"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要使用麦克风录制睡眠声音，以分析打鼾和呼吸暂停趋势。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "读取 Apple 健康中的睡眠时长和血氧（SpO2）数据，以便与您的睡眠检测记录对照查看。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要使用麥克風錄製睡眠聲音，以分析打鼾和呼吸中止趨勢。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "讀取 Apple 健康中的睡眠時長與血氧（SpO2）資料，以便與您的睡眠檢測記錄對照查看。"
           }
         }
       }
     },
-    "NSUserTrackingUsageDescription" : {
-      "comment" : "Privacy - Tracking Usage Description",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This identifier will be used to deliver more relevant ads to you."
+    "NSMicrophoneUsageDescription": {
+      "comment": "Privacy - Microphone Usage Description",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone access is used to record sleep sounds and analyze snoring or breathing pause patterns."
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "お客様により関連性の高い広告を表示するために使用されます。"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠中のいびきや無呼吸の傾向を簡易解析するため、マイクによる録音を使用します。"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此标识符将用于向您提供更相关的广告。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要使用麦克风录制睡眠声音，以分析打鼾和呼吸暂停趋势。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此識別碼將用於向您提供更相關的廣告。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要使用麥克風錄製睡眠聲音，以分析打鼾和呼吸中止趨勢。"
+          }
+        }
+      }
+    },
+    "NSUserTrackingUsageDescription": {
+      "comment": "Privacy - Tracking Usage Description",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This identifier will be used to deliver more relevant ads to you."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お客様により関連性の高い広告を表示するために使用されます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此标识符将用于向您提供更相关的广告。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此識別碼將用於向您提供更相關的廣告。"
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
