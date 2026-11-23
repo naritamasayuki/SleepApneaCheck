@@ -4,18 +4,12 @@ import UIKit
 /// 睡眠音声の録音・簡易解析画面
 struct SleepMonitorView: View {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var subscriptionService: SubscriptionService
 
     @StateObject private var recorderService = AudioRecorderService()
     @State private var isAnalyzing = false
     @State private var selectedSession: SleepAudioSession?
     @State private var recorderErrorMessage: String?
     @State private var showPermissionSettingsAlert = false
-    @State private var showPaywall = false
-
-    private var maxRecordingSeconds: TimeInterval? {
-        subscriptionService.isPro ? nil : SubscriptionService.freeMaxRecordingSeconds
-    }
 
     var body: some View {
         NavigationStack {
@@ -45,13 +39,6 @@ struct SleepMonitorView: View {
                         ProgressView(value: recorderService.currentMeterLevel)
                             .tint(recorderService.isRecording ? .red : .blue)
                             .padding(.horizontal, 32)
-
-                        if !subscriptionService.isPro {
-                            Text(String(localized: "monitor.free_limit_notice"))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                        }
 
                         Label(String(localized: "monitor.bedside_tip"), systemImage: "battery.100.bolt")
                             .font(.caption)
@@ -107,32 +94,6 @@ struct SleepMonitorView: View {
                         .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-
-                    // プレミアム案内バナー
-                    if !subscriptionService.isPro {
-                        Button {
-                            showPaywall = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "crown.fill")
-                                    .foregroundStyle(.yellow)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(String(localized: "monitor.pro_banner.title"))
-                                        .font(.subheadline.bold())
-                                        .foregroundStyle(.primary)
-                                    Text(String(localized: "monitor.pro_banner.subtitle"))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
-                        }
-                    }
                 }
                 .padding()
             }
@@ -145,9 +106,6 @@ struct SleepMonitorView: View {
             }
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session, recorderService: recorderService)
-            }
-            .sheet(isPresented: $showPaywall) {
-                PaywallView()
             }
             .alert(
                 String(localized: "common.error"),
@@ -185,7 +143,7 @@ struct SleepMonitorView: View {
             let dirURL = try appState.repository.ensureAudioDirectoryURL()
             try await recorderService.startRecording(
                 in: dirURL,
-                maxDurationSeconds: maxRecordingSeconds
+                maxDurationSeconds: nil
             ) { autoStoppedURL in
                 Task { @MainActor in
                     await analyzeRecording(at: autoStoppedURL)

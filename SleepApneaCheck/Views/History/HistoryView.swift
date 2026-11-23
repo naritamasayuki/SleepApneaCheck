@@ -4,26 +4,18 @@ import SwiftUI
 /// 過去の問診・睡眠録音履歴と推移グラフ画面
 struct HistoryView: View {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var subscriptionService: SubscriptionService
 
     @State private var selectedSegment = 0
     @State private var selectedScreening: ScreeningResult?
     @State private var selectedSession: SleepAudioSession?
-    @State private var showPaywall = false
     @StateObject private var previewRecorder = AudioRecorderService()
 
     private var visibleScreenings: [ScreeningResult] {
-        if subscriptionService.isPro {
-            return appState.screenings
-        }
-        return Array(appState.screenings.prefix(SubscriptionService.freeHistoryLimit))
+        appState.screenings
     }
 
     private var visibleSessions: [SleepAudioSession] {
-        if subscriptionService.isPro {
-            return appState.audioSessions
-        }
-        return Array(appState.audioSessions.prefix(SubscriptionService.freeHistoryLimit))
+        appState.audioSessions
     }
 
     var body: some View {
@@ -52,9 +44,6 @@ struct HistoryView: View {
             }
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session, recorderService: previewRecorder)
-            }
-            .sheet(isPresented: $showPaywall) {
-                PaywallView()
             }
         }
     }
@@ -120,10 +109,6 @@ struct HistoryView: View {
                         appState.deleteScreening(at: offsets)
                     }
                 }
-
-                if !subscriptionService.isPro && appState.screenings.count > SubscriptionService.freeHistoryLimit {
-                    proHistoryGateSection
-                }
             }
         }
     }
@@ -182,27 +167,6 @@ struct HistoryView: View {
                     .onDelete { offsets in
                         appState.deleteAudioSession(at: offsets)
                     }
-                }
-
-                if !subscriptionService.isPro && appState.audioSessions.count > SubscriptionService.freeHistoryLimit {
-                    proHistoryGateSection
-                }
-            }
-        }
-    }
-
-    private var proHistoryGateSection: some View {
-        Section {
-            Button {
-                showPaywall = true
-            } label: {
-                HStack {
-                    Image(systemName: "lock.fill")
-                        .foregroundStyle(.yellow)
-                    Text(String(localized: "history.pro_gate"))
-                        .font(.subheadline)
-                    Spacer()
-                    Image(systemName: "chevron.right")
                 }
             }
         }

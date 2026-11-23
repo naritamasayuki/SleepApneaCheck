@@ -91,7 +91,6 @@ final class AppState: ObservableObject {
 @main
 struct SleepApneaCheckApp: App {
     @StateObject private var appState = AppState()
-    @StateObject private var subscriptionService = SubscriptionService()
     @StateObject private var notificationService = NotificationService()
     @StateObject private var adService = AdService()
 
@@ -99,7 +98,6 @@ struct SleepApneaCheckApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
-                .environmentObject(subscriptionService)
                 .environmentObject(notificationService)
                 .environmentObject(adService)
                 .task {

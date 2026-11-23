@@ -3,23 +3,17 @@ import SwiftUI
 import GoogleMobileAds
 #endif
 
-/// Pro 未加入ユーザー向けに画面下部へ表示するバナー広告ビュー
+/// 画面下部へ表示するバナー広告ビュー
 struct AdBannerView: View {
-    @EnvironmentObject private var subscriptionService: SubscriptionService
-
     var body: some View {
-        if subscriptionService.isPro {
-            EmptyView()
-        } else {
-            #if canImport(GoogleMobileAds)
-            AdMobBannerRepresentable(adUnitID: AdService.bannerAdUnitID)
-                .frame(height: 50)
-                .frame(maxWidth: .infinity)
-                .background(Color(.secondarySystemBackground))
-            #else
-            EmptyView()
-            #endif
-        }
+        #if canImport(GoogleMobileAds)
+        AdMobBannerRepresentable(adUnitID: AdService.bannerAdUnitID)
+            .frame(height: 50)
+            .frame(maxWidth: .infinity)
+            .background(Color(.secondarySystemBackground))
+        #else
+        EmptyView()
+        #endif
     }
 }
 

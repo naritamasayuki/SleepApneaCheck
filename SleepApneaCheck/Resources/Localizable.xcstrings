@@ -1079,6 +1079,7 @@
       }
     },
     "feedback.button.copied": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1107,6 +1108,7 @@
       }
     },
     "feedback.button.copy": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1135,6 +1137,7 @@
       }
     },
     "feedback.button.send_email": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1163,6 +1166,7 @@
       }
     },
     "feedback.button.send_github": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1191,6 +1195,7 @@
       }
     },
     "feedback.category.bug": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1219,6 +1224,7 @@
       }
     },
     "feedback.category.feature": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1247,6 +1253,7 @@
       }
     },
     "feedback.category.general": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1275,6 +1282,7 @@
       }
     },
     "feedback.category.label": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1303,6 +1311,7 @@
       }
     },
     "feedback.device_info.footer": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1331,6 +1340,7 @@
       }
     },
     "feedback.include_device_info": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1359,6 +1369,7 @@
       }
     },
     "feedback.intro": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1387,6 +1398,7 @@
       }
     },
     "feedback.mail_unavailable": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1415,6 +1427,7 @@
       }
     },
     "feedback.message.placeholder": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1443,6 +1456,7 @@
       }
     },
     "feedback.section.details": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1471,6 +1485,7 @@
       }
     },
     "feedback.section.send": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1499,6 +1514,7 @@
       }
     },
     "feedback.subject.placeholder": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1527,6 +1543,7 @@
       }
     },
     "feedback.title": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1932,30 +1949,29 @@
       }
     },
     "legal.terms.body": {
-      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "1. Medical Disclaimer: This application is a self-check screening tool and is NOT a medical device. It does not provide medical diagnosis or treatment.\n\n2. Subscriptions: Payment will be charged to your Apple ID account upon confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period."
+            "value": "1. Medical Disclaimer: This application is a free self-check screening tool and is NOT a medical device. It does not provide medical diagnosis or treatment.\n\n2. Advertisements: To keep all features free of charge, this app displays banner advertisements via Google AdMob."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "1. 医療免責事項：本アプリはセルフチェック用の補助ツールであり、医療機器ではありません。医学的診断や治療を提供するものではありません。\n\n2. サブスクリプション：購入確認時にApple IDアカウントへ課金されます。現在の契約期間終了の24時間前までに解約しない限り、自動的に更新されます。"
+            "value": "1. 医療免責事項：本アプリは無料でご利用いただけるセルフチェック補助ツールであり、医療機器ではありません。医学的診断や治療を提供するものではありません。\n\n2. 広告表示：すべての機能を無料で提供するため、本アプリでは Google AdMob によるバナー広告を表示します。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "1. 医疗免责声明：本应用仅为自我筛查辅助工具，并非医疗器械，不提供医疗诊断或治疗。\n\n2. 订阅条款：确认购买时将向您的 Apple ID 账户扣款。除非在当前订阅期结束前至少 24 小时取消，否则订阅将自动续订。"
+            "value": "1. 医疗免责声明：本应用为免费自我筛查辅助工具，并非医疗器械，不提供医疗诊断或治疗。\n\n2. 广告说明：为免费提供全部功能，本应用通过 Google AdMob 展示横幅广告。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "1. 醫療免責聲明：本應用程式僅供自我篩檢輔助使用，並非醫療器材，不提供醫療診斷或治療。\n\n2. 訂閱條款：確認購買時將向您的 Apple ID 帳號扣款。除非在目前訂閱期結束前至少 24 小時取消，否則訂閱將自動續訂。"
+            "value": "1. 醫療免責聲明：本應用程式為免費自我篩檢輔助工具，並非醫療器材，不提供醫療診斷或治療。\n\n2. 廣告說明：為免費提供全部功能，本應用程式透過 Google AdMob 顯示橫幅廣告。"
           }
         }
       }
@@ -2454,6 +2470,7 @@
       }
     },
     "paywall.feature.ad_free": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4483,6 +4500,7 @@
       }
     },
     "settings.feedback.subtitle": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4511,6 +4529,7 @@
       }
     },
     "settings.feedback.title": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4858,6 +4877,7 @@
       }
     },
     "settings.section.support": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {

@@ -1,12 +1,10 @@
 import SwiftUI
 
-/// アプリ設定・リマインダー・Proプラン管理画面
+/// アプリ設定・リマインダー・サポート画面
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var subscriptionService: SubscriptionService
     @EnvironmentObject private var notificationService: NotificationService
 
-    @State private var showPaywall = false
     @State private var showClearConfirm = false
     @State private var notificationDeniedAlert = false
     @State private var reminderTime: Date = Date()
@@ -17,39 +15,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // プレミアムプランセクション
-                Section {
-                    Button {
-                        showPaywall = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: subscriptionService.isPro ? "crown.fill" : "crown")
-                                .font(.title2)
-                                .foregroundStyle(.yellow)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(
-                                    subscriptionService.isPro
-                                        ? String(localized: "settings.pro.active_title")
-                                        : String(localized: "settings.pro.upgrade_title")
-                                )
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-
-                                Text(
-                                    subscriptionService.isPro
-                                        ? String(localized: "settings.pro.active_desc")
-                                        : String(localized: "settings.pro.upgrade_desc")
-                                )
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-
                 // 音声解析感度
                 Section {
                     Picker(String(localized: "settings.sensitivity.title"), selection: $appState.sensitivity) {
@@ -146,19 +111,10 @@ struct SettingsView: View {
                     HStack {
                         Text(String(localized: "settings.version"))
                         Spacer()
-                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")
+                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.0")
                             .foregroundStyle(.secondary)
                     }
                 }
-
-                #if DEBUG
-                Section("Developer") {
-                    Toggle("Debug Pro Mode", isOn: Binding(
-                        get: { subscriptionService.isPro },
-                        set: { _ in subscriptionService.toggleDebugPro() }
-                    ))
-                }
-                #endif
             }
             .navigationTitle(String(localized: "settings.title"))
             .onAppear {
@@ -171,9 +127,6 @@ struct SettingsView: View {
                 DispatchQueue.main.async {
                     hasLoadedInitialTime = true
                 }
-            }
-            .sheet(isPresented: $showPaywall) {
-                PaywallView()
             }
             .sheet(item: $legalDocument) { doc in
                 LegalDocumentView(documentType: doc)
