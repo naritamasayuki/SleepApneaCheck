@@ -156,6 +156,8 @@ struct SessionDetailView: View {
                     }
                     .buttonStyle(.bordered)
 
+                    SleepCareGoodsSection()
+
                     DisclaimerBanner()
                 }
                 .padding()

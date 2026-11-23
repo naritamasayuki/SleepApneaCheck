@@ -1571,6 +1571,398 @@
         }
       }
     },
+    "goods.button.amazon": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amazon"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amazonで見る"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "去 Amazon 查看"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前往 Amazon"
+          }
+        }
+      }
+    },
+    "goods.mouthpiece.desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Self-care oral guard designed to support jaw position during sleep."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就寝時の下顎の位置をサポートするセルフケア用マウスピースです。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在睡眠中支撑下颌位置的日常防鼾护具。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在睡眠中支撐下顎位置的日常防鼾護具。"
+          }
+        }
+      }
+    },
+    "goods.mouthpiece.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anti-Snoring Mouthpiece"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いびき対策マウスピース"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠防打鼾牙套"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠防打鼾牙套"
+          }
+        }
+      }
+    },
+    "goods.mouthtape.desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supports nasal breathing and helps prevent dry mouth on waking."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就寝時の鼻呼吸をサポートし、起床時の口の渇きやいびき対策に役立ちます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "辅助夜间鼻呼吸，缓解晨起口干和打鼾困扰。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輔助夜間鼻呼吸，緩解晨起口乾與打鼾困擾。"
+          }
+        }
+      }
+    },
+    "goods.mouthtape.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gentle Mouth Tape for Nasal Breathing"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口閉じテープ（口呼吸防止）"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "防张口呼吸闭口贴"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "防張口呼吸閉口貼"
+          }
+        }
+      }
+    },
+    "goods.nasalstrips.desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gently widens nasal passages to make breathing easier at night."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鼻孔をやさしく広げて鼻通りをスムーズにし、息苦しさを軽減します。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "温和扩张鼻腔通道，让夜间呼吸更顺畅。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "溫和擴張鼻腔通道，讓夜間呼吸更順暢。"
+          }
+        }
+      }
+    },
+    "goods.nasalstrips.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nasal Dilator Strips"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鼻腔拡張テープ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通气鼻贴"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通氣鼻貼"
+          }
+        }
+      }
+    },
+    "goods.oximeter.desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convenient for daily wellness checks of SpO2 and pulse rate."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日々の血中酸素飽和度（SpO2）や脈拍数の目安確認に便利です。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "便于日常监测血氧饱和度（SpO2）和脉率参考值。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "便於日常監測血氧飽和度（SpO2）與脈搏參考值。"
+          }
+        }
+      }
+    },
+    "goods.oximeter.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fingertip Pulse Oximeter"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パルスオキシメーター（血中酸素計）"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "指夹式血氧仪"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "指夾式血氧機"
+          }
+        }
+      }
+    },
+    "goods.pillow.desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helps maintain a side-sleeping posture to reduce airway narrowing."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仰向け寝による気道の圧迫を和らげ、横向き姿勢を保ちやすくします。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "帮助保持侧卧睡姿，减少仰卧时的气道压迫。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "幫助保持側臥睡姿，減少仰臥時的氣道壓迫。"
+          }
+        }
+      }
+    },
+    "goods.pillow.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Side-Sleeper Anti-Snore Pillow"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "横向き寝サポート枕・抱き枕"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "侧睡止鼾护颈枕"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "側睡止鼾護頸枕"
+          }
+        }
+      }
+    },
+    "goods.section.pr_disclaimer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PR: As an Amazon Associate, this app earns from qualifying purchases. These items are general self-care goods and do not replace medical treatment."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PR：Amazonアソシエイト・プログラムのリンクを含みます。紹介グッズは一般的なセルフケア用品であり、医療機器による治療の代替ではありません。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PR：包含 Amazon 联盟推广链接。所荐商品为日常护理用品，不能替代专业医疗治疗。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PR：包含 Amazon 聯盟推廣連結。所推薦商品為日常護理用品，無法取代專業醫療治療。"
+          }
+        }
+      }
+    },
+    "goods.section.subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Self-care items to support comfortable side-sleeping and nasal breathing on Amazon."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "横向き寝や鼻呼吸のサポートに役立つセルフケアグッズをAmazonでチェックできます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Amazon 查找有助于侧睡和鼻呼吸的实用护理用品。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Amazon 尋找有助於側睡與鼻呼吸的實用護理用品。"
+          }
+        }
+      }
+    },
+    "goods.section.title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommended Sleep & Snore Care"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いびき・睡眠ケアのおすすめグッズ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推荐止鼾与睡眠护理好物"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推薦止鼾與睡眠護理好物"
+          }
+        }
+      }
+    },
     "history.audio.summary %lld %lld": {
       "extractionState": "stale",
       "localizations": {

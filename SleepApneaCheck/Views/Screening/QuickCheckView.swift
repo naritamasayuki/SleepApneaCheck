@@ -123,6 +123,12 @@ struct QuickCheckView: View {
                         .padding(.vertical, 6)
                     }
                     .id("quickResultSection")
+
+                    Section {
+                        SleepCareGoodsSection(compact: true)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
+                    }
                 }
             }
         }

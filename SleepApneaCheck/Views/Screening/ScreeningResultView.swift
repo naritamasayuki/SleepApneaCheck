@@ -87,6 +87,9 @@ struct ScreeningResultView: View {
                     }
                     .buttonStyle(.borderedProminent)
 
+                    // いびき・睡眠ケアおすすめグッズ（Amazon アソシエイト PR）
+                    SleepCareGoodsSection()
+
                     DisclaimerBanner()
                 }
                 .padding()
