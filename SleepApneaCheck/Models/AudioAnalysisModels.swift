@@ -123,10 +123,15 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     let isSimulated: Bool
     /// 就寝時の対策・状況タグ
     var tags: [SleepCareTag]
+    /// 起床時の熟睡感評価（1〜5、未入力は nil）
+    var morningRating: Int?
+    /// 起床時のひとことメモ
+    var note: String
 
     enum CodingKeys: String, CodingKey {
         case id, recordedAt, durationSeconds, audioFileName, events, normalizedLevels
-        case snoringDurationSeconds, apneaPauseCount, longestPauseSeconds, isSimulated, tags
+        case snoringDurationSeconds, apneaPauseCount, longestPauseSeconds, isSimulated
+        case tags, morningRating, note
     }
 
     init(from decoder: Decoder) throws {
@@ -143,6 +148,22 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         isSimulated = try container.decode(Bool.self, forKey: .isSimulated)
         // 旧バージョン保存データとの後方互換性を維持
         tags = try container.decodeIfPresent([SleepCareTag].self, forKey: .tags) ?? []
+        morningRating = try container.decodeIfPresent(Int.self, forKey: .morningRating)
+        note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
+    }
+
+    /// 競合定番の「いびきスコア (0〜100)」を算出する（値が大きいほどいびき・呼吸乱れが強い）
+    var snoreScore: Int {
+        guard durationSeconds > 0 else { return 0 }
+        // いびき時間割合（最大55点）＋1時間あたり無呼吸候補（最大35点）＋強大いびきピーク補正（最大10点）
+        let ratioScore = min(55.0, snoringPercentage * 0.9)
+        let apneaScore = min(35.0, estimatedEventsPerHour * 1.5)
+        let peakSnoreDb = events
+            .filter { $0.type == .snoring }
+            .map(\.peakDecibels)
+            .max() ?? -60.0
+        let intensityBonus = peakSnoreDb > -25.0 ? 10.0 : (peakSnoreDb > -35.0 ? 5.0 : 0.0)
+        return min(100, max(0, Int((ratioScore + apneaScore + intensityBonus).rounded())))
     }
 
     /// 1時間あたりの推定無呼吸候補イベント数（簡易指標）
@@ -180,7 +201,9 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         apneaPauseCount: Int,
         longestPauseSeconds: TimeInterval,
         isSimulated: Bool = false,
-        tags: [SleepCareTag] = []
+        tags: [SleepCareTag] = [],
+        morningRating: Int? = nil,
+        note: String = ""
     ) {
         self.id = id
         self.recordedAt = recordedAt
@@ -193,5 +216,7 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         self.longestPauseSeconds = longestPauseSeconds
         self.isSimulated = isSimulated
         self.tags = tags
+        self.morningRating = morningRating
+        self.note = note
     }
 }

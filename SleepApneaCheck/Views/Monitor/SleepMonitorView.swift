@@ -11,8 +11,17 @@ struct SleepMonitorView: View {
     @State private var isAnalyzing = false
     @State private var selectedSession: SleepAudioSession?
     @State private var selectedTags: [SleepCareTag] = []
+    @State private var delayMinutes: Int = 0
+    @State private var remainingDelaySeconds: Int = 0
+    @State private var delayTask: Task<Void, Never>?
     @State private var recorderErrorMessage: String?
     @State private var showPermissionSettingsAlert = false
+
+    private let delayOptions = [0, 10, 20, 30]
+
+    private var isCountingDownDelay: Bool {
+        remainingDelaySeconds > 0
+    }
 
     var body: some View {
         NavigationStack {
@@ -34,14 +43,46 @@ struct SleepMonitorView: View {
                                 .foregroundStyle(recorderService.isRecording ? .red : .blue)
                         }
 
-                        Text(formattedDuration(recorderService.elapsedSeconds))
-                            .font(.system(size: 38, weight: .bold, design: .rounded))
-                            .monospacedDigit()
+                        if isCountingDownDelay {
+                            VStack(spacing: 8) {
+                                Text(String(localized: "monitor.delay.counting_down"))
+                                    .font(.subheadline.bold())
+                                    .foregroundStyle(.orange)
+                                Text(formattedDuration(TimeInterval(remainingDelaySeconds)))
+                                    .font(.system(size: 38, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.orange)
+                                    .monospacedDigit()
+                            }
+                        } else {
+                            Text(formattedDuration(recorderService.elapsedSeconds))
+                                .font(.system(size: 38, weight: .bold, design: .rounded))
+                                .monospacedDigit()
+                        }
 
                         // 音量レベルメーター
                         ProgressView(value: recorderService.currentMeterLevel)
                             .tint(recorderService.isRecording ? .red : .blue)
                             .padding(.horizontal, 32)
+
+                        // 録音開始ディレイ設定（入眠待ちタイマー）
+                        if !recorderService.isRecording && !isCountingDownDelay && !isAnalyzing {
+                            VStack(spacing: 6) {
+                                Text(String(localized: "monitor.delay.title"))
+                                    .font(.caption.bold())
+                                    .foregroundStyle(.secondary)
+                                Picker("", selection: $delayMinutes) {
+                                    ForEach(delayOptions, id: \.self) { mins in
+                                        Text(
+                                            mins == 0
+                                                ? String(localized: "monitor.delay.none")
+                                                : String(localized: "monitor.delay.minutes \(mins)")
+                                        ).tag(mins)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                            }
+                            .padding(.horizontal, 8)
+                        }
 
                         Label(String(localized: "monitor.bedside_tip"), systemImage: "battery.100.bolt")
                             .font(.caption)
@@ -51,10 +92,31 @@ struct SleepMonitorView: View {
                         if isAnalyzing {
                             ProgressView(String(localized: "monitor.analyzing"))
                                 .padding(.top, 4)
+                        } else if isCountingDownDelay {
+                            HStack(spacing: 12) {
+                                Button(role: .destructive) {
+                                    cancelDelayCountdown()
+                                } label: {
+                                    Text(String(localized: "common.cancel"))
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+
+                                Button {
+                                    cancelDelayCountdown()
+                                    Task {
+                                        await startRecordingNow()
+                                    }
+                                } label: {
+                                    Text(String(localized: "monitor.delay.start_now"))
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
                         } else {
                             Button {
                                 Task {
-                                    await toggleRecording()
+                                    await handleStartOrStopTap()
                                 }
                             } label: {
                                 Label(
@@ -140,7 +202,7 @@ struct SleepMonitorView: View {
         }
     }
 
-    private func toggleRecording() async {
+    private func handleStartOrStopTap() async {
         if recorderService.isRecording {
             if let fileURL = recorderService.stopRecording() {
                 await analyzeRecording(at: fileURL)
@@ -148,6 +210,40 @@ struct SleepMonitorView: View {
             return
         }
 
+        if delayMinutes > 0 {
+            let granted = await recorderService.requestPermission()
+            guard granted else {
+                showPermissionSettingsAlert = true
+                return
+            }
+            startDelayCountdown(seconds: delayMinutes * 60)
+            return
+        }
+
+        await startRecordingNow()
+    }
+
+    private func startDelayCountdown(seconds: Int) {
+        cancelDelayCountdown()
+        remainingDelaySeconds = seconds
+        delayTask = Task { @MainActor in
+            while remainingDelaySeconds > 0 && !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                guard !Task.isCancelled else { return }
+                remainingDelaySeconds -= 1
+            }
+            guard !Task.isCancelled else { return }
+            await startRecordingNow()
+        }
+    }
+
+    private func cancelDelayCountdown() {
+        delayTask?.cancel()
+        delayTask = nil
+        remainingDelaySeconds = 0
+    }
+
+    private func startRecordingNow() async {
         do {
             let dirURL = try appState.repository.ensureAudioDirectoryURL()
             try await recorderService.startRecording(

@@ -56,6 +56,14 @@ final class AppState: ObservableObject {
         persistHistory()
     }
 
+    /// 既存セッションの起床時熟睡感・メモを更新する
+    func updateAudioSessionJournal(sessionID: UUID, morningRating: Int?, note: String) {
+        guard let idx = audioSessions.firstIndex(where: { $0.id == sessionID }) else { return }
+        audioSessions[idx].morningRating = morningRating
+        audioSessions[idx].note = note
+        persistHistory()
+    }
+
     /// 問診結果を削除する
     func deleteScreening(at offsets: IndexSet) {
         screenings.remove(atOffsets: offsets)

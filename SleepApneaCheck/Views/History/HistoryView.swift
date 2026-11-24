@@ -154,12 +154,48 @@ struct HistoryView: View {
                         Chart(visibleSessions.reversed()) { session in
                             BarMark(
                                 x: .value("Date", session.recordedAt),
-                                y: .value("Events/h", session.estimatedEventsPerHour)
+                                y: .value("Score", session.snoreScore)
                             )
                             .foregroundStyle(session.audioRiskCategory.themeColor)
                         }
+                        .chartYScale(domain: 0...100)
                         .frame(height: 150)
                         .padding(.vertical, 8)
+                    }
+                }
+
+                let tagStats = RemedyAnalyticsService.analyze(sessions: appState.audioSessions)
+                if !tagStats.isEmpty {
+                    Section(String(localized: "history.analytics.remedies_title")) {
+                        ForEach(tagStats) { stat in
+                            HStack {
+                                Image(systemName: stat.tag.symbolName)
+                                    .foregroundStyle(.blue)
+                                    .frame(width: 22)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(stat.tag.localizedTitle)
+                                        .font(.subheadline.bold())
+                                    Text(String(localized: "history.analytics.avg_score \(Int(stat.averageScoreWithTag.rounded())) \(stat.sessionCount)"))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if let delta = stat.scoreDelta {
+                                    let rounded = Int(delta.rounded())
+                                    let sign = rounded > 0 ? "+" : ""
+                                    Text("\(sign)\(rounded)")
+                                        .font(.subheadline.bold().monospacedDigit())
+                                        .foregroundStyle(rounded < 0 ? .green : (rounded > 0 ? .red : .secondary))
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(
+                                            (rounded < 0 ? Color.green : (rounded > 0 ? Color.red : Color.gray))
+                                                .opacity(0.14)
+                                        )
+                                        .clipShape(Capsule())
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -191,9 +227,16 @@ struct HistoryView: View {
                                     }
                                 }
                                 Spacer()
-                                Text(String(format: "%.1f/h", session.estimatedEventsPerHour))
-                                    .font(.subheadline.bold().monospacedDigit())
-                                    .foregroundStyle(session.audioRiskCategory.themeColor)
+                                VStack(alignment: .trailing, spacing: 2) {
+                                    Text(String(localized: "history.audio.score \(session.snoreScore)"))
+                                        .font(.subheadline.bold().monospacedDigit())
+                                        .foregroundStyle(session.audioRiskCategory.themeColor)
+                                    if let rating = session.morningRating {
+                                        Text(String(repeating: "★", count: rating))
+                                            .font(.caption2)
+                                            .foregroundStyle(.yellow)
+                                    }
+                                }
                             }
                         }
                     }

@@ -10,6 +10,9 @@ struct SessionDetailView: View {
 
     @State private var playbackError: String?
     @State private var editableTags: [SleepCareTag] = []
+    @State private var morningRating: Int?
+    @State private var noteText: String = ""
+    @FocusState private var isNoteFocused: Bool
 
     private var audioURL: URL? {
         guard let fileName = session.audioFileName else { return nil }
@@ -37,19 +40,30 @@ struct SessionDetailView: View {
                             .clipShape(Capsule())
                     }
 
-                    // サマリーカード
-                    VStack(spacing: 12) {
-                        HStack {
-                            Image(systemName: session.audioRiskCategory.symbolName)
-                                .foregroundStyle(session.audioRiskCategory.themeColor)
-                            Text(session.audioRiskCategory.localizedTitle)
-                                .font(.headline)
-                                .foregroundStyle(session.audioRiskCategory.themeColor)
-                        }
+                    // サマリーカード（いびきスコアゲージ＋主要指標）
+                    VStack(spacing: 14) {
+                        HStack(spacing: 16) {
+                            ScoreGaugeView(
+                                title: String(localized: "session.metric.snore_score"),
+                                score: session.snoreScore,
+                                maxScore: 100,
+                                color: session.audioRiskCategory.themeColor
+                            )
 
-                        Text(session.recordedAt.formatted(date: .abbreviated, time: .shortened))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Image(systemName: session.audioRiskCategory.symbolName)
+                                        .foregroundStyle(session.audioRiskCategory.themeColor)
+                                    Text(session.audioRiskCategory.localizedTitle)
+                                        .font(.headline)
+                                        .foregroundStyle(session.audioRiskCategory.themeColor)
+                                }
+                                Text(session.recordedAt.formatted(date: .abbreviated, time: .shortened))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
 
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                             metricBox(
@@ -124,6 +138,48 @@ struct SessionDetailView: View {
                         .onChange(of: editableTags) { _, newValue in
                             appState.updateAudioSessionTags(sessionID: session.id, tags: newValue)
                         }
+
+                    // 起床時の熟睡感（★1〜5）＆ひとことメモ
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(String(localized: "session.journal.title"))
+                            .font(.subheadline.bold())
+
+                        HStack(spacing: 10) {
+                            Text(String(localized: "session.journal.rating_label"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            ForEach(1...5, id: \.self) { star in
+                                Button {
+                                    morningRating = (morningRating == star) ? nil : star
+                                    appState.updateAudioSessionJournal(
+                                        sessionID: session.id,
+                                        morningRating: morningRating,
+                                        note: noteText
+                                    )
+                                } label: {
+                                    Image(systemName: (morningRating ?? 0) >= star ? "star.fill" : "star")
+                                        .font(.title3)
+                                        .foregroundStyle((morningRating ?? 0) >= star ? .yellow : .gray.opacity(0.4))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+
+                        TextField(String(localized: "session.journal.note_placeholder"), text: $noteText)
+                            .textFieldStyle(.roundedBorder)
+                            .focused($isNoteFocused)
+                            .onChange(of: noteText) { _, newValue in
+                                appState.updateAudioSessionJournal(
+                                    sessionID: session.id,
+                                    morningRating: morningRating,
+                                    note: newValue
+                                )
+                            }
+                    }
+                    .padding()
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     // 検出イベントリスト（録音ファイルがある場合はタップで5秒前からピンポイント再生）
                     VStack(alignment: .leading, spacing: 10) {
@@ -205,12 +261,20 @@ struct SessionDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 editableTags = session.tags
+                morningRating = session.morningRating
+                noteText = session.note
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "common.done")) {
                         recorderService.stopPlayback()
                         dismiss()
+                    }
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button(String(localized: "common.done")) {
+                        isNoteFocused = false
                     }
                 }
             }
