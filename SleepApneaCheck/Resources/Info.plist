@@ -26,6 +26,8 @@
 	<false/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Used to read recent sleep duration and blood oxygen (SpO2) data from Apple Health for comparison with your sleep check history.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Required by HealthKit framework; this app only reads sleep and blood oxygen data and does not write data without your permission.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to record sleep audio for snoring and breathing pause analysis.</string>
 	<key>NSUserTrackingUsageDescription</key>

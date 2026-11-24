@@ -157,7 +157,6 @@ enum ReportExportService {
             .font: font,
             .foregroundColor: color
         ]
-        let rect = CGRect(x: x, y: y, width: width, height: 200)
         let bounding = (text as NSString).boundingRect(
             with: CGSize(width: width, height: .greatestFiniteMagnitude),
             options: [.usesLineFragmentOrigin, .usesFontLeading],

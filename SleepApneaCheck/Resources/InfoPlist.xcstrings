@@ -87,6 +87,34 @@
         }
       }
     },
+    "NSHealthUpdateUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required by Apple Health integration; this app only reads sleep and blood oxygen data for display."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple ヘルスケア連携のため必要な項目です。本アプリは睡眠時間および血中酸素データの読み取りのみを行います。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 健康框架所需说明；本应用仅读取睡眠时长与血氧数据用于展示。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 健康框架所需說明；本應用程式僅讀取睡眠時長與血氧資料用於顯示。"
+          }
+        }
+      }
+    },
     "NSMicrophoneUsageDescription": {
       "comment": "Privacy - Microphone Usage Description",
       "localizations": {
