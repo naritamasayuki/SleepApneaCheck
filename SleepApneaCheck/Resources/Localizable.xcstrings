@@ -1996,25 +1996,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Connect"
+            "value": "Continue"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "連携する"
+            "value": "続ける"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "连接"
+            "value": "继续"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "連結"
+            "value": "繼續"
           }
         }
       }
