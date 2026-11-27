@@ -324,6 +324,34 @@
         }
       }
     },
+    "error.audio.recording_in_progress": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playback is unavailable while sleep recording is in progress."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "録音中は過去の音声を再生できません。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠录音进行中无法播放历史音频。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠錄音進行中無法播放歷史音訊。"
+          }
+        }
+      }
+    },
     "error.audio.open_failed": {
       "extractionState": "stale",
       "localizations": {
@@ -2568,25 +2596,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "SleepApnea Check stores all questionnaire results and sleep audio recordings locally on your device. No audio recordings or personal health responses are uploaded to external servers. Microphone access is used solely for sleep sound analysis on your device. You may delete all stored data at any time from Settings."
+            "value": "SleepApnea Check stores all questionnaire results and sleep audio recordings locally on your device. No audio recordings or personal health responses are uploaded to our servers. Microphone and optional Apple Health access are used solely on your device. For ad delivery, Google AdMob may collect device identifiers, advertising data, and diagnostics in accordance with your tracking/consent settings. You may delete all stored data at any time from Settings."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "「睡眠時無呼吸チェック」（SleepApnea Check）は、問診結果および睡眠録音データをすべてお使いの端末内にのみ保存します。録音音声や回答データが外部サーバーへ送信されることはありません。マイク権限は端末内での睡眠音解析にのみ使用されます。保存データは設定画面からいつでもすべて削除できます。"
+            "value": "「睡眠時無呼吸チェック」（SleepApnea Check）は、問診結果および睡眠録音データをすべてお使いの端末内にのみ保存します。録音音声や健康に関する回答データが当方のサーバーへ送信されることはありません。マイク権限および任意の Apple ヘルスケア連携は端末内での解析・表示にのみ使用されます。なお、バナー広告配信のため Google AdMob が広告識別子・広告データ・診断情報等を取得する場合があります（トラッキング許可・同意設定に従います）。保存データは設定画面からいつでもすべて削除できます。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "睡眠呼吸暂停检测（SleepApnea Check）将所有问卷结果和睡眠录音仅保存在您的设备本地，不会上传至外部服务器。麦克风权限仅用于设备本地的声音分析。您可随时在设置中清除所有数据。"
+            "value": "睡眠呼吸暂停检测（SleepApnea Check）将所有问卷结果和睡眠录音仅保存在您的设备本地，不会上传至我们的服务器。麦克风及可选的 Apple 健康权限仅用于设备本地分析。为展示横幅广告，Google AdMob 可能会根据您的跟踪与同意设置收集设备标识符、广告数据和诊断信息。您可随时在设置中清除所有数据。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "睡眠呼吸中止檢測（SleepApnea Check）將所有問卷結果與睡眠錄音僅儲存在您的裝置本機，不會上傳至外部伺服器。麥克風權限僅用於裝置本機的聲音分析。您可隨時在設定中清除所有資料。"
+            "value": "睡眠呼吸中止檢測（SleepApnea Check）將所有問卷結果與睡眠錄音僅儲存在您的裝置本機，不會上傳至我們的伺服器。麥克風及可選的 Apple 健康權限僅用於裝置本機分析。為顯示橫幅廣告，Google AdMob 可能會依據您的追蹤與同意設定收集裝置識別碼、廣告資料與診斷資訊。您可隨時在設定中清除所有資料。"
           }
         }
       }

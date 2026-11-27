@@ -2,25 +2,21 @@
 
 ## 1. 提出前チェックリスト（実装・設定済み項目）
 - [x] **アプリアイコン**: `1024x1024` 不透明PNG（`AppIcon.png`）を `Assets.xcassets/AppIcon.appiconset` に配置済み
-- [x] **Privacy Manifest**: `SleepApneaCheck/Resources/PrivacyInfo.xcprivacy` を作成・組み込み済み（`NSPrivacyAccessedAPICategoryUserDefaults`: `CA92.1`）
+- [x] **Privacy Manifest**: `SleepApneaCheck/Resources/PrivacyInfo.xcprivacy` を作成・組み込み済み（`NSPrivacyTracking = true`、AdMob 収集データ型および `UserDefaults`: `CA92.1`）
 - [x] **輸出コンプライアンス**: `Info.plist` に `ITSAppUsesNonExemptEncryption = false` を設定済み
 - [x] **バックグラウンド録音**: `Info.plist` に `UIBackgroundModes: audio` および 4言語の `NSMicrophoneUsageDescription` を設定済み
 - [x] **医療免責事項**: 簡易判定結果内・詳細問診・録音画面・設定画面に医療機器ではない旨の免責表示を実装済み
-- [x] **サブスクリプション規約対応（ガイドライン 3.1.2）**: `PaywallView` に自動更新注記、購入復元ボタン、プライバシーポリシー・利用規約リンクを実装済み
-- [x] **StoreKit テスト設定**: `SleepApneaCheck/Resources/SleepApneaCheck.storekit` を作成済み
+- [x] **マネタイズ設計（完全無料・アプリ内課金なし）**: 全機能を完全無料で提供し、Google AdMob バナー広告（UMP/ATT対応）および Amazon アソシエイト（PR表記あり）で運営
 
 ---
 
 ## 2. 提出前に開発者側で行う作業（App Store Connect / Xcode）
 1. **Bundle Identifier & Team 設定**:
-   - Xcode > Signing & Capabilities で Apple Developer Team を選択し、`com.sleepapneacheck.app`（または固有の Bundle ID）をプロビジョニングする。
-2. **App Store Connect でサブスクリプション商品を登録**:
-   - `com.sleepapneacheck.pro.monthly`（Pro 月額プラン）
-   - `com.sleepapneacheck.pro.yearly`（Pro 年額プラン）
-3. **プライバシーポリシー公開 URL の設定**:
-   - App Store Connect の「アプリのプライバシー」に公開URL（GitHub Pages 等）を設定する。
-4. **Archive & Upload**:
-   - Xcode メニュー `Product > Archive` から `Distribute App > App Store Connect` でアップロードする。
+   - Xcode > Signing & Capabilities で Apple Developer Team（`4KR684T6KV`）を選択し、`com.naritamasayuki.sleepapneacheck` をプロビジョニングする。
+2. **プライバシーポリシー公開 URL の設定**:
+   - App Store Connect の「アプリのプライバシー」に公開URL（`https://naritamasayuki.github.io/SleepApneaCheck/privacy-policy.html`）を設定する。
+3. **Archive & Upload**:
+   - `xcodebuild archive` および `xcodebuild -exportArchive`（または Xcode `Product > Archive`）で App Store Connect へアップロードする。
 
 ---
 
@@ -73,6 +69,6 @@ In the "Monitor" tab, reviewers can tap "Run Sample Audio Simulation" to immedia
 3. Microphone Permission:
 Requested only when the user taps "Start Sleep Recording" in the Monitor tab, solely for local on-device sleep sound analysis. No audio is uploaded to external servers.
 
-4. In-App Purchases (StoreKit 2):
-Subscription products (`com.sleepapneacheck.pro.monthly`, `com.sleepapneacheck.pro.yearly`) unlock unlimited overnight recording duration and full history access.
+4. Monetization (100% Free, No In-App Purchases):
+All features are completely free with no In-App Purchases. The app is supported by Google AdMob banner ads (with UMP & ATT) and Amazon Associate links clearly labeled as "PR".
 ```

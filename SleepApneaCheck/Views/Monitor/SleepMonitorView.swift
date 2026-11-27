@@ -5,22 +5,20 @@ import UIKit
 /// 睡眠音声の録音・簡易解析画面
 struct SleepMonitorView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var recorderService: AudioRecorderService
     @Environment(\.requestReview) private var requestReview
 
-    @StateObject private var recorderService = AudioRecorderService()
     @State private var isAnalyzing = false
     @State private var selectedSession: SleepAudioSession?
     @State private var selectedTags: [SleepCareTag] = []
     @State private var delayMinutes: Int = 0
-    @State private var remainingDelaySeconds: Int = 0
-    @State private var delayTask: Task<Void, Never>?
     @State private var recorderErrorMessage: String?
     @State private var showPermissionSettingsAlert = false
 
     private let delayOptions = [0, 10, 20, 30]
 
     private var isCountingDownDelay: Bool {
-        remainingDelaySeconds > 0
+        recorderService.remainingDelaySeconds > 0
     }
 
     var body: some View {
@@ -48,14 +46,15 @@ struct SleepMonitorView: View {
                                 Text(String(localized: "monitor.delay.counting_down"))
                                     .font(.subheadline.bold())
                                     .foregroundStyle(.orange)
-                                Text(formattedDuration(TimeInterval(remainingDelaySeconds)))
-                                    .font(.system(size: 38, weight: .bold, design: .rounded))
+                                Text(formattedDuration(TimeInterval(recorderService.remainingDelaySeconds)))
+                                    .font(.largeTitle.weight(.bold))
                                     .foregroundStyle(.orange)
                                     .monospacedDigit()
                             }
                         } else {
-                            Text(formattedDuration(recorderService.elapsedSeconds))
-                                .font(.system(size: 38, weight: .bold, design: .rounded))
+                            let effectiveElapsed = max(0, recorderService.elapsedSeconds - recorderService.configuredDelaySeconds)
+                            Text(formattedDuration(effectiveElapsed))
+                                .font(.largeTitle.weight(.bold))
                                 .monospacedDigit()
                         }
 
@@ -95,7 +94,7 @@ struct SleepMonitorView: View {
                         } else if isCountingDownDelay {
                             HStack(spacing: 12) {
                                 Button(role: .destructive) {
-                                    cancelDelayCountdown()
+                                    recorderService.cancelRecordingAndDiscard()
                                 } label: {
                                     Text(String(localized: "common.cancel"))
                                         .frame(maxWidth: .infinity)
@@ -103,10 +102,7 @@ struct SleepMonitorView: View {
                                 .buttonStyle(.bordered)
 
                                 Button {
-                                    cancelDelayCountdown()
-                                    Task {
-                                        await startRecordingNow()
-                                    }
+                                    recorderService.skipRemainingDelay()
                                 } label: {
                                     Text(String(localized: "monitor.delay.start_now"))
                                         .frame(maxWidth: .infinity)
@@ -204,54 +200,40 @@ struct SleepMonitorView: View {
 
     private func handleStartOrStopTap() async {
         if recorderService.isRecording {
+            let startedAt = recorderService.recordingStartedAt ?? Date()
+            let ignoreDelay = recorderService.configuredDelaySeconds
+            let interruptions = recorderService.interruptionCount
             if let fileURL = recorderService.stopRecording() {
-                await analyzeRecording(at: fileURL)
+                await analyzeRecording(
+                    at: fileURL,
+                    startedAt: startedAt,
+                    ignoreInitialSeconds: ignoreDelay,
+                    interruptionCount: interruptions
+                )
             }
             return
         }
 
-        if delayMinutes > 0 {
-            let granted = await recorderService.requestPermission()
-            guard granted else {
-                showPermissionSettingsAlert = true
-                return
-            }
-            startDelayCountdown(seconds: delayMinutes * 60)
-            return
-        }
-
-        await startRecordingNow()
+        // 入眠待ちディレイ選択時も即座に録音セッションを開始してロック中バックグラウンドを維持し、
+        // 解析時に先頭のディレイ分を除外する
+        await startRecordingNow(delaySeconds: TimeInterval(delayMinutes * 60))
     }
 
-    private func startDelayCountdown(seconds: Int) {
-        cancelDelayCountdown()
-        remainingDelaySeconds = seconds
-        delayTask = Task { @MainActor in
-            while remainingDelaySeconds > 0 && !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                guard !Task.isCancelled else { return }
-                remainingDelaySeconds -= 1
-            }
-            guard !Task.isCancelled else { return }
-            await startRecordingNow()
-        }
-    }
-
-    private func cancelDelayCountdown() {
-        delayTask?.cancel()
-        delayTask = nil
-        remainingDelaySeconds = 0
-    }
-
-    private func startRecordingNow() async {
+    private func startRecordingNow(delaySeconds: TimeInterval) async {
         do {
             let dirURL = try appState.repository.ensureAudioDirectoryURL()
             try await recorderService.startRecording(
                 in: dirURL,
+                delaySeconds: delaySeconds,
                 maxDurationSeconds: nil
             ) { autoStoppedURL in
                 Task { @MainActor in
-                    await analyzeRecording(at: autoStoppedURL)
+                    await analyzeRecording(
+                        at: autoStoppedURL,
+                        startedAt: recorderService.recordingStartedAt ?? Date(),
+                        ignoreInitialSeconds: recorderService.configuredDelaySeconds,
+                        interruptionCount: recorderService.interruptionCount
+                    )
                 }
             }
         } catch AudioRecorderError.permissionDenied {
@@ -261,7 +243,12 @@ struct SleepMonitorView: View {
         }
     }
 
-    private func analyzeRecording(at url: URL) async {
+    private func analyzeRecording(
+        at url: URL,
+        startedAt: Date,
+        ignoreInitialSeconds: TimeInterval,
+        interruptionCount: Int
+    ) async {
         isAnalyzing = true
         let sensitivity = appState.sensitivity
         let tagsToAttach = selectedTags
@@ -269,12 +256,19 @@ struct SleepMonitorView: View {
 
         do {
             var session = try await Task.detached(priority: .userInitiated) {
-                try AudioAnalyzer.analyzeFile(at: url, sensitivity: sensitivity)
+                try AudioAnalyzer.analyzeFile(
+                    at: url,
+                    sensitivity: sensitivity,
+                    recordedAt: startedAt,
+                    ignoreInitialSeconds: ignoreInitialSeconds,
+                    interruptionCount: interruptionCount
+                )
             }.value
             session.tags = tagsToAttach
             appState.addAudioSession(session)
             selectedSession = session
-            if ReviewPromptService.recordActionAndShouldPrompt() {
+            // 高リスク判定直後の不安なタイミングではレビュー依頼を出さない
+            if session.audioRiskCategory != .high && ReviewPromptService.recordActionAndShouldPrompt() {
                 requestReview()
             }
         } catch {
@@ -283,13 +277,10 @@ struct SleepMonitorView: View {
     }
 
     private func runSimulatedAnalysis() {
+        // デモ結果は本物の履歴・PDF・効果分析に混ぜずプレビューのみ表示する
         var session = AudioAnalyzer.generateSimulatedSession(sensitivity: appState.sensitivity)
         session.tags = selectedTags
-        appState.addAudioSession(session)
         selectedSession = session
-        if ReviewPromptService.recordActionAndShouldPrompt() {
-            requestReview()
-        }
     }
 
     private func formattedDuration(_ seconds: TimeInterval) -> String {

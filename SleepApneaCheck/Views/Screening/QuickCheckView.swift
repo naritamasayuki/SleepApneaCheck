@@ -124,10 +124,12 @@ struct QuickCheckView: View {
                     }
                     .id("quickResultSection")
 
-                    Section {
-                        SleepCareGoodsSection(compact: true)
-                            .listRowInsets(EdgeInsets())
-                            .listRowBackground(Color.clear)
+                    if result.riskLevel != .high {
+                        Section {
+                            SleepCareGoodsSection(compact: true)
+                                .listRowInsets(EdgeInsets())
+                                .listRowBackground(Color.clear)
+                        }
                     }
                 }
             }

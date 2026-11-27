@@ -5,12 +5,12 @@ import SwiftUI
 struct HistoryView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var healthKitService: HealthKitService
+    @EnvironmentObject private var recorderService: AudioRecorderService
 
     @State private var selectedSegment = 0
     @State private var selectedScreening: ScreeningResult?
     @State private var selectedSession: SleepAudioSession?
     @State private var pdfReportURL: URL?
-    @StateObject private var previewRecorder = AudioRecorderService()
 
     private var visibleScreenings: [ScreeningResult] {
         appState.screenings
@@ -18,6 +18,10 @@ struct HistoryView: View {
 
     private var visibleSessions: [SleepAudioSession] {
         appState.audioSessions
+    }
+
+    private var realSessionsForChart: [SleepAudioSession] {
+        appState.audioSessions.filter { !$0.isSimulated }
     }
 
     var body: some View {
@@ -69,7 +73,7 @@ struct HistoryView: View {
                 ScreeningResultView(result: result)
             }
             .sheet(item: $selectedSession) { session in
-                SessionDetailView(session: session, recorderService: previewRecorder)
+                SessionDetailView(session: session, recorderService: recorderService)
             }
         }
     }
@@ -149,9 +153,9 @@ struct HistoryView: View {
             )
         } else {
             List {
-                if appState.audioSessions.count >= 2 {
+                if realSessionsForChart.count >= 2 {
                     Section(String(localized: "history.chart.audio_trend")) {
-                        Chart(visibleSessions.reversed()) { session in
+                        Chart(realSessionsForChart.reversed()) { session in
                             BarMark(
                                 x: .value("Date", session.recordedAt),
                                 y: .value("Score", session.snoreScore)

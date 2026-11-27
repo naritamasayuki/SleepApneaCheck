@@ -17,6 +17,14 @@ enum ReportExportService {
         let margin: CGFloat = 40
         let contentWidth = pageRect.width - margin * 2
 
+        // デモ（シミュレーション）結果は医師提出用レポートから除外する
+        let realSessions = audioSessions.filter { !$0.isSimulated }
+
+        // ダークモード端末でも白い紙の上で確実に読める固定ライト配色を使用
+        let primaryTextColor = UIColor.black
+        let secondaryTextColor = UIColor.darkGray
+        let accentColor = UIColor(red: 0.0, green: 0.45, blue: 0.85, alpha: 1.0)
+
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect)
         let data = renderer.pdfData { context in
             context.beginPage()
@@ -29,14 +37,14 @@ enum ReportExportService {
 
             // タイトルヘッダー
             let title = String(localized: "pdf.report.title")
-            y = drawText(title, font: titleFont, color: .label, x: margin, y: y, width: contentWidth)
+            y = drawText(title, font: titleFont, color: primaryTextColor, x: margin, y: y, width: contentWidth)
             y += 4
 
             let dateStr = generatedAt.formatted(date: .long, time: .shortened)
             y = drawText(
                 String(localized: "pdf.report.generated_at \(dateStr)"),
                 font: captionFont,
-                color: .secondaryLabel,
+                color: secondaryTextColor,
                 x: margin,
                 y: y,
                 width: contentWidth
@@ -50,7 +58,7 @@ enum ReportExportService {
             y = drawText(
                 String(localized: "pdf.report.section.screening"),
                 font: headingFont,
-                color: .systemBlue,
+                color: accentColor,
                 x: margin,
                 y: y,
                 width: contentWidth
@@ -61,7 +69,7 @@ enum ReportExportService {
                 y = drawText(
                     String(localized: "pdf.report.no_data"),
                     font: bodyFont,
-                    color: .secondaryLabel,
+                    color: secondaryTextColor,
                     x: margin,
                     y: y,
                     width: contentWidth
@@ -70,7 +78,7 @@ enum ReportExportService {
                 for item in screenings.prefix(5) {
                     let itemDate = item.date.formatted(date: .abbreviated, time: .shortened)
                     let line = "• \(itemDate)  |  \(item.riskLevel.localizedTitle)  |  STOP-Bang: \(item.stopBangScore)/8  |  ESS: \(item.essScore)/24 (\(item.sleepinessLevel.localizedTitle))"
-                    y = drawText(line, font: bodyFont, color: .label, x: margin, y: y, width: contentWidth)
+                    y = drawText(line, font: bodyFont, color: primaryTextColor, x: margin, y: y, width: contentWidth)
                     y += 5
                 }
             }
@@ -79,28 +87,28 @@ enum ReportExportService {
             drawDivider(at: y, margin: margin, width: contentWidth, in: context.cgContext)
             y += 14
 
-            // 2. 睡眠録音解析結果（直近5件）
+            // 2. 睡眠録音解析結果（直近5件・実録音のみ）
             y = drawText(
                 String(localized: "pdf.report.section.audio"),
                 font: headingFont,
-                color: .systemBlue,
+                color: accentColor,
                 x: margin,
                 y: y,
                 width: contentWidth
             )
             y += 8
 
-            if audioSessions.isEmpty {
+            if realSessions.isEmpty {
                 y = drawText(
                     String(localized: "pdf.report.no_data"),
                     font: bodyFont,
-                    color: .secondaryLabel,
+                    color: secondaryTextColor,
                     x: margin,
                     y: y,
                     width: contentWidth
                 )
             } else {
-                for session in audioSessions.prefix(5) {
+                for session in realSessions.prefix(5) {
                     let itemDate = session.recordedAt.formatted(date: .abbreviated, time: .shortened)
                     let mins = max(1, Int(session.durationSeconds / 60))
                     let tagNames = session.tags.map(\.localizedTitle).joined(separator: ", ")
@@ -116,7 +124,7 @@ enum ReportExportService {
                     if !tagNames.isEmpty {
                         line += "  [\(tagNames)]"
                     }
-                    y = drawText(line, font: bodyFont, color: .label, x: margin, y: y, width: contentWidth)
+                    y = drawText(line, font: bodyFont, color: primaryTextColor, x: margin, y: y, width: contentWidth)
                     y += 5
                 }
             }
@@ -127,14 +135,15 @@ enum ReportExportService {
             _ = drawText(
                 String(localized: "disclaimer.banner"),
                 font: captionFont,
-                color: .secondaryLabel,
+                color: secondaryTextColor,
                 x: margin,
                 y: disclaimerY,
                 width: contentWidth
             )
         }
 
-        let fileName = "SleepApneaCheck_Report_\(Int(generatedAt.timeIntervalSince1970)).pdf"
+        // 一時ディレクトリにファイルが増殖しないよう固定ファイル名で上書きする
+        let fileName = "SleepApneaCheck_Doctor_Report.pdf"
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         do {
             try data.write(to: fileURL, options: [.atomic])
@@ -169,7 +178,7 @@ enum ReportExportService {
 
     private static func drawDivider(at y: CGFloat, margin: CGFloat, width: CGFloat, in ctx: CGContext) {
         ctx.saveGState()
-        ctx.setStrokeColor(UIColor.separator.cgColor)
+        ctx.setStrokeColor(UIColor(white: 0.78, alpha: 1.0).cgColor)
         ctx.setLineWidth(0.75)
         ctx.move(to: CGPoint(x: margin, y: y))
         ctx.addLine(to: CGPoint(x: margin + width, y: y))

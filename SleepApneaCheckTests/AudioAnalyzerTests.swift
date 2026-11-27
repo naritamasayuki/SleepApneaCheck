@@ -38,4 +38,56 @@ final class AudioAnalyzerTests: XCTestCase {
         let session = AudioAnalyzer.analyzeSamples(samples, sampleRate: sampleRate)
         XCTAssertEqual(session.apneaPauseCount, 0)
     }
+
+    func testEightHourWindowDecibelsCompletesEfficiently() {
+        // 8時間（28,800秒）分の1秒窓dB配列でも安全かつ高速に解析できること
+        var windows = [Double](repeating: -68.0, count: 28_800)
+        // 300秒ごとに5秒いびき → 12秒静寂 → 3秒再開音 を10回配置
+        for cycle in 0..<10 {
+            let base = 100 + cycle * 300
+            for s in base..<(base + 5) { windows[s] = -25.0 }
+            for s in (base + 17)..<(base + 20) { windows[s] = -22.0 }
+        }
+
+        let session = AudioAnalyzer.analyzeWindowDecibels(
+            windows,
+            totalDuration: 28_800,
+            sensitivity: .standard,
+            isSimulated: false
+        )
+        XCTAssertEqual(session.durationSeconds, 28_800, accuracy: 0.1)
+        XCTAssertEqual(session.apneaPauseCount, 10)
+        XCTAssertEqual(session.normalizedLevels.count, 60)
+    }
+
+    func testSingleOneSecondNoiseDoesNotTriggerFalseApneaPause() {
+        // 単発1秒の物音 → 12秒静寂 → 単発音 は無呼吸候補として誤検出しないこと
+        var windows = [Double](repeating: -70.0, count: 30)
+        windows[2] = -20.0
+        windows[15] = -20.0
+
+        let session = AudioAnalyzer.analyzeWindowDecibels(
+            windows,
+            totalDuration: 30,
+            sensitivity: .standard,
+            isSimulated: false
+        )
+        XCTAssertEqual(session.apneaPauseCount, 0)
+    }
+
+    func testShortRealRecordingDoesNotReturnHighRisk() {
+        // 短い実録音（60秒）で1回無呼吸候補があっても、1時間換算による高リスク誤判定をしないこと
+        var windows = [Double](repeating: -70.0, count: 60)
+        for s in 2..<6 { windows[s] = -22.0 }
+        for s in 26..<30 { windows[s] = -22.0 } // 20秒ポーズ
+
+        let session = AudioAnalyzer.analyzeWindowDecibels(
+            windows,
+            totalDuration: 60,
+            sensitivity: .standard,
+            isSimulated: false
+        )
+        XCTAssertTrue(session.isShortRecording)
+        XCTAssertNotEqual(session.audioRiskCategory, .high)
+    }
 }

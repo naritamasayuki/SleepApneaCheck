@@ -56,7 +56,7 @@ final class HistoryRepository: Sendable {
         audioDirectoryURL.appendingPathComponent(fileName)
     }
 
-    /// 履歴データを読み込む（ファイルが存在しない場合は空データを返す）
+    /// 履歴データを読み込む（ファイルが存在しない場合は空データを返し、全体破損時はバックアップへ退避する）
     func load() throws -> HistoryStoreData {
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
             return HistoryStoreData()
@@ -68,8 +68,25 @@ final class HistoryRepository: Sendable {
             decoder.dateDecodingStrategy = .iso8601
             return try decoder.decode(HistoryStoreData.self, from: data)
         } catch {
-            logger.error("履歴データ読み込み失敗: \(error.localizedDescription)")
+            logger.error("履歴データ読み込み失敗（バックアップへ退避）: \(error.localizedDescription)")
+            backupCorruptedFileIfNeeded()
             throw HistoryRepositoryError.loadFailed(error)
+        }
+    }
+
+    /// 破損した履歴ファイルを別名へ退避し、次回保存でのデータ消失を防ぐ
+    private func backupCorruptedFileIfNeeded() {
+        let timestamp = Int(Date().timeIntervalSince1970)
+        let backupURL = fileURL
+            .deletingLastPathComponent()
+            .appendingPathComponent("history.corrupt-\(timestamp).json")
+        do {
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                try FileManager.default.moveItem(at: fileURL, to: backupURL)
+                logger.info("破損した履歴ファイルを退避しました: \(backupURL.lastPathComponent)")
+            }
+        } catch {
+            logger.error("破損履歴ファイルの退避に失敗: \(error.localizedDescription)")
         }
     }
 
@@ -82,7 +99,6 @@ final class HistoryRepository: Sendable {
             }
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             let data = try encoder.encode(storeData)
             try data.write(to: fileURL, options: [.atomic])
         } catch {

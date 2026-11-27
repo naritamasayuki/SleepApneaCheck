@@ -214,7 +214,8 @@ struct ScreeningView: View {
         )
         appState.addScreeningResult(result)
         latestResult = result
-        if ReviewPromptService.recordActionAndShouldPrompt() {
+        // 高リスク判定直後の不安なタイミングではレビュー依頼を出さない
+        if result.riskLevel != .high && ReviewPromptService.recordActionAndShouldPrompt() {
             requestReview()
         }
     }

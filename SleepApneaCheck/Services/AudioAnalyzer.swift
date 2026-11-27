@@ -26,12 +26,16 @@ enum AudioAnalyzer {
 
     /// 無呼吸候補とみなす最小静寂時間（秒）— 医学的基準(10秒以上)に準拠
     static let minimumApneaPauseSeconds: TimeInterval = 10.0
+    /// 無呼吸候補とみなす最大静寂時間（秒）— 2分を超える長い無音は静かな睡眠区間とみなし誤検出を防ぐ
+    static let maximumApneaPauseSeconds: TimeInterval = 120.0
 
-    /// 音声ファイルURLを読み込んで解析を実行する
+    /// 音声ファイルURLをチャンク単位でストリーミング読み込みし、低メモリで解析を実行する
     static func analyzeFile(
         at url: URL,
         sensitivity: AudioSensitivity = .standard,
-        recordedAt: Date = Date()
+        recordedAt: Date = Date(),
+        ignoreInitialSeconds: TimeInterval = 0,
+        interruptionCount: Int = 0
     ) throws -> SleepAudioSession {
         let audioFile: AVAudioFile
         do {
@@ -42,40 +46,75 @@ enum AudioAnalyzer {
         }
 
         let format = audioFile.processingFormat
-        let frameCount = AVAudioFrameCount(audioFile.length)
-        guard frameCount > 0, format.sampleRate > 0 else {
+        let totalFrames = audioFile.length
+        guard totalFrames > 0, format.sampleRate > 0 else {
             throw AudioAnalyzerError.emptyAudioData
         }
 
-        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
+        // 入眠待ちディレイ分を先頭からスキップ（総フレーム数を超えない範囲にクランプ）
+        let skipFrames = AVAudioFramePosition(max(0, ignoreInitialSeconds) * format.sampleRate)
+        let effectiveStartFrame = min(skipFrames, totalFrames)
+        if effectiveStartFrame > 0 {
+            audioFile.framePosition = effectiveStartFrame
+        }
+
+        let remainingFrames = totalFrames - effectiveStartFrame
+        guard remainingFrames > 0 else {
+            throw AudioAnalyzerError.emptyAudioData
+        }
+
+        // 1秒単位のチャンクバッファを再利用してストリーミング読み込み（8時間でも数MB以下）
+        let windowFrameCount = AVAudioFrameCount(max(1, Int(format.sampleRate)))
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: windowFrameCount) else {
             throw AudioAnalyzerError.invalidAudioFormat
         }
 
-        do {
-            try audioFile.read(into: buffer)
-        } catch {
-            logger.error("音声バッファ読み込み失敗: \(error.localizedDescription)")
-            throw AudioAnalyzerError.fileOpenFailed(error)
+        var windowDecibels: [Double] = []
+        let estimatedSeconds = Int(Double(remainingFrames) / format.sampleRate) + 1
+        windowDecibels.reserveCapacity(estimatedSeconds)
+        var processedFrames: AVAudioFramePosition = 0
+
+        while audioFile.framePosition < totalFrames {
+            let framesLeft = AVAudioFrameCount(min(AVAudioFramePosition(windowFrameCount), totalFrames - audioFile.framePosition))
+            guard framesLeft > 0 else { break }
+
+            do {
+                try audioFile.read(into: buffer, frameCount: framesLeft)
+            } catch {
+                logger.error("音声チャンク読み込み失敗: \(error.localizedDescription)")
+                throw AudioAnalyzerError.fileOpenFailed(error)
+            }
+
+            let readCount = Int(buffer.frameLength)
+            guard readCount > 0, let channelData = buffer.floatChannelData?[0] else {
+                break
+            }
+
+            var sumSquares: Double = 0
+            for i in 0..<readCount {
+                let value = Double(channelData[i])
+                sumSquares += value * value
+            }
+            let rms = sqrt(sumSquares / Double(readCount))
+            let db = rms > 1e-5 ? max(-100.0, 20.0 * log10(rms)) : -100.0
+            windowDecibels.append(db)
+            processedFrames += AVAudioFramePosition(readCount)
         }
 
-        guard let channelData = buffer.floatChannelData?[0] else {
-            throw AudioAnalyzerError.invalidAudioFormat
-        }
-
-        let sampleCount = Int(buffer.frameLength)
-        let samples = Array(UnsafeBufferPointer(start: channelData, count: sampleCount))
-
-        return analyzeSamples(
-            samples,
-            sampleRate: format.sampleRate,
+        let totalDuration = Double(processedFrames) / format.sampleRate
+        let effectiveRecordedAt = recordedAt.addingTimeInterval(max(0, ignoreInitialSeconds))
+        return analyzeWindowDecibels(
+            windowDecibels,
+            totalDuration: totalDuration,
             sensitivity: sensitivity,
             audioFileName: url.lastPathComponent,
-            recordedAt: recordedAt,
-            isSimulated: false
+            recordedAt: effectiveRecordedAt,
+            isSimulated: false,
+            interruptionCount: interruptionCount
         )
     }
 
-    /// Float PCMサンプル配列を解析する（単体テスト・実データ共通コアロジック）
+    /// Float PCMサンプル配列を解析する（単体テスト・シミュレーション共通コアロジック）
     static func analyzeSamples(
         _ samples: [Float],
         sampleRate: Double,
@@ -99,7 +138,6 @@ enum AudioAnalyzer {
         }
 
         let totalDuration = Double(samples.count) / sampleRate
-        // 1秒単位のウィンドウでRMS(dBFS)を算出
         let windowSize = max(1, Int(sampleRate))
         var windowDecibels: [Double] = []
         windowDecibels.reserveCapacity((samples.count / windowSize) + 1)
@@ -114,10 +152,44 @@ enum AudioAnalyzer {
                 sumSquares += value * value
             }
             let rms = sqrt(sumSquares / Double(count))
-            // 0除算回避のため -100 dBFS を下限とする
             let db = rms > 1e-5 ? max(-100.0, 20.0 * log10(rms)) : -100.0
             windowDecibels.append(db)
             index = end
+        }
+
+        return analyzeWindowDecibels(
+            windowDecibels,
+            totalDuration: totalDuration,
+            sensitivity: sensitivity,
+            audioFileName: audioFileName,
+            recordedAt: recordedAt,
+            isSimulated: isSimulated
+        )
+    }
+
+    /// 1秒単位のdBFS配列からいびき・無呼吸候補区間を解析する（低メモリ共通エンジン）
+    static func analyzeWindowDecibels(
+        _ windowDecibels: [Double],
+        totalDuration: TimeInterval,
+        sensitivity: AudioSensitivity = .standard,
+        audioFileName: String? = nil,
+        recordedAt: Date = Date(),
+        isSimulated: Bool = false,
+        interruptionCount: Int = 0
+    ) -> SleepAudioSession {
+        guard !windowDecibels.isEmpty, totalDuration > 0 else {
+            return SleepAudioSession(
+                recordedAt: recordedAt,
+                durationSeconds: 0,
+                audioFileName: audioFileName,
+                events: [],
+                normalizedLevels: [],
+                snoringDurationSeconds: 0,
+                apneaPauseCount: 0,
+                longestPauseSeconds: 0,
+                isSimulated: isSimulated,
+                interruptionCount: interruptionCount
+            )
         }
 
         // 下位20%パーセンタイルを環境ノイズフロアとして推定
@@ -128,14 +200,41 @@ enum AudioAnalyzer {
         let snoringThresholdDb = max(-55.0, noiseFloorDb + sensitivity.snoringThresholdOffsetDb)
         let silenceUpperBoundDb = noiseFloorDb + 4.0
 
-        var events: [SleepAudioEvent] = []
+        var snoreEvents: [SleepAudioEvent] = []
+        var apneaEvents: [SleepAudioEvent] = []
         var snoringSeconds: TimeInterval = 0
         var longestPause: TimeInterval = 0
         var apneaPauseCount = 0
 
-        // 1. いびき候補区間の検出（連続した高音圧ウィンドウを統合）
+        // 1. いびき候補区間の検出（連続した高音圧ウィンドウを抽出し、2秒以内の近接イベントは統合）
         var currentSnoreStart: Int?
         var currentSnorePeak: Double = -100.0
+
+        func commitSnore(start: Int, end: Int, peak: Double) {
+            let duration = TimeInterval(end - start)
+            snoringSeconds += duration
+            if let last = snoreEvents.last,
+               TimeInterval(start) - (last.startOffsetSeconds + last.durationSeconds) <= 2.0 {
+                // 近接するいびきイベントを統合してイベント数爆発を防ぐ
+                let mergedDuration = TimeInterval(end) - last.startOffsetSeconds
+                snoreEvents[snoreEvents.count - 1] = SleepAudioEvent(
+                    id: last.id,
+                    type: .snoring,
+                    startOffsetSeconds: last.startOffsetSeconds,
+                    durationSeconds: mergedDuration,
+                    peakDecibels: max(last.peakDecibels, peak)
+                )
+            } else {
+                snoreEvents.append(
+                    SleepAudioEvent(
+                        type: .snoring,
+                        startOffsetSeconds: TimeInterval(start),
+                        durationSeconds: duration,
+                        peakDecibels: peak
+                    )
+                )
+            }
+        }
 
         for (sec, db) in windowDecibels.enumerated() {
             if db >= snoringThresholdDb {
@@ -146,45 +245,31 @@ enum AudioAnalyzer {
                     currentSnorePeak = max(currentSnorePeak, db)
                 }
             } else if let start = currentSnoreStart {
-                let duration = TimeInterval(sec - start)
-                snoringSeconds += duration
-                events.append(
-                    SleepAudioEvent(
-                        type: .snoring,
-                        startOffsetSeconds: TimeInterval(start),
-                        durationSeconds: duration,
-                        peakDecibels: currentSnorePeak
-                    )
-                )
+                commitSnore(start: start, end: sec, peak: currentSnorePeak)
                 currentSnoreStart = nil
             }
         }
         if let start = currentSnoreStart {
-            let duration = TimeInterval(windowDecibels.count - start)
-            snoringSeconds += duration
-            events.append(
-                SleepAudioEvent(
-                    type: .snoring,
-                    startOffsetSeconds: TimeInterval(start),
-                    durationSeconds: duration,
-                    peakDecibels: currentSnorePeak
-                )
-            )
+            commitSnore(start: start, end: windowDecibels.count, peak: currentSnorePeak)
         }
 
         // 2. 無呼吸候補区間の検出
-        // 条件: 高音圧(いびき/呼吸)の後に10秒以上の静寂が続き、直後に呼吸再開音(しきい値以上)がある
-        var hasPriorLoudSound = false
+        // 誤検出削減: 単発の物音(1秒)ではなく、2秒以上のいびき(連続高音圧)の後に
+        // 10秒以上の静寂が続き、直後に呼吸再開音(しきい値以上)があるパターンのみ検出
+        var consecutiveLoudSeconds = 0
+        var hasPriorSnoringPattern = false
         var silenceStart: Int?
 
         for (sec, db) in windowDecibels.enumerated() {
             if db >= snoringThresholdDb {
                 if let sStart = silenceStart {
                     let pauseDuration = TimeInterval(sec - sStart)
-                    if hasPriorLoudSound && pauseDuration >= minimumApneaPauseSeconds {
+                    if hasPriorSnoringPattern
+                        && pauseDuration >= minimumApneaPauseSeconds
+                        && pauseDuration <= maximumApneaPauseSeconds {
                         apneaPauseCount += 1
                         longestPause = max(longestPause, pauseDuration)
-                        events.append(
+                        apneaEvents.append(
                             SleepAudioEvent(
                                 type: .apneaPause,
                                 startOffsetSeconds: TimeInterval(sStart),
@@ -194,14 +279,21 @@ enum AudioAnalyzer {
                         )
                     }
                     silenceStart = nil
+                    consecutiveLoudSeconds = 1
+                } else {
+                    consecutiveLoudSeconds += 1
                 }
-                hasPriorLoudSound = true
+                if consecutiveLoudSeconds >= 2 {
+                    hasPriorSnoringPattern = true
+                }
             } else if db <= silenceUpperBoundDb {
-                if hasPriorLoudSound && silenceStart == nil {
+                consecutiveLoudSeconds = 0
+                if hasPriorSnoringPattern && silenceStart == nil {
                     silenceStart = sec
                 }
             } else {
                 // 中間音量（通常呼吸）の場合は無呼吸ポーズをリセット
+                consecutiveLoudSeconds = 0
                 silenceStart = nil
             }
         }
@@ -209,7 +301,7 @@ enum AudioAnalyzer {
         // タイムライン描画用に最大60ポイントへ正規化ダウンサンプリング (0.0〜1.0)
         let normalizedLevels = downsampleLevels(windowDecibels, targetCount: 60)
 
-        let sortedEvents = events.sorted { $0.startOffsetSeconds < $1.startOffsetSeconds }
+        let sortedEvents = (snoreEvents + apneaEvents).sorted { $0.startOffsetSeconds < $1.startOffsetSeconds }
 
         return SleepAudioSession(
             recordedAt: recordedAt,
@@ -220,7 +312,8 @@ enum AudioAnalyzer {
             snoringDurationSeconds: snoringSeconds,
             apneaPauseCount: apneaPauseCount,
             longestPauseSeconds: longestPause,
-            isSimulated: isSimulated
+            isSimulated: isSimulated,
+            interruptionCount: interruptionCount
         )
     }
 

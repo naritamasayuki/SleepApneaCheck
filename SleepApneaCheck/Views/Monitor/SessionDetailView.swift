@@ -110,7 +110,7 @@ struct SessionDetailView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
 
-                    // 録音再生ボタン
+                    // 録音再生ボタン（進行中の録音がある場合は誤停止防止のため無効化）
                     if let url = audioURL, FileManager.default.fileExists(atPath: url.path) {
                         Button {
                             do {
@@ -128,6 +128,7 @@ struct SessionDetailView: View {
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
+                        .disabled(recorderService.isRecording)
                     }
 
                     // 対策・状況タグ（後から編集可能）
@@ -163,18 +164,17 @@ struct SessionDetailView: View {
                                         .foregroundStyle((morningRating ?? 0) >= star ? .yellow : .gray.opacity(0.4))
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityLabel("\(star) / 5")
                             }
                         }
 
                         TextField(String(localized: "session.journal.note_placeholder"), text: $noteText)
                             .textFieldStyle(.roundedBorder)
                             .focused($isNoteFocused)
-                            .onChange(of: noteText) { _, newValue in
-                                appState.updateAudioSessionJournal(
-                                    sessionID: session.id,
-                                    morningRating: morningRating,
-                                    note: newValue
-                                )
+                            .onChange(of: isNoteFocused) { _, focused in
+                                if !focused {
+                                    saveJournalIfNeeded()
+                                }
                             }
                     }
                     .padding()
@@ -200,43 +200,45 @@ struct SessionDetailView: View {
                                 .foregroundStyle(.secondary)
                         } else {
                             let hasAudioFile = audioURL.map { FileManager.default.fileExists(atPath: $0.path) } ?? false
-                            ForEach(session.events) { event in
-                                let isThisEventPlaying = recorderService.isPlaying && recorderService.activeEventID == event.id
-                                Button {
-                                    guard hasAudioFile, let url = audioURL else { return }
-                                    do {
-                                        let seekStart = max(0, event.startOffsetSeconds - 5.0)
-                                        try recorderService.play(url: url, startingAt: seekStart, eventID: event.id)
-                                    } catch {
-                                        playbackError = error.localizedDescription
-                                    }
-                                } label: {
-                                    HStack {
-                                        Image(systemName: event.type == .apneaPause ? "pause.circle.fill" : "waveform")
-                                            .foregroundStyle(event.type == .apneaPause ? .red : .orange)
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(event.type.localizedTitle)
-                                                .font(.subheadline.bold())
-                                                .foregroundStyle(.primary)
-                                            Text(formatOffset(event.startOffsetSeconds))
-                                                .font(.caption)
+                            LazyVStack(spacing: 4) {
+                                ForEach(session.events) { event in
+                                    let isThisEventPlaying = recorderService.isPlaying && recorderService.activeEventID == event.id
+                                    Button {
+                                        guard hasAudioFile, let url = audioURL else { return }
+                                        do {
+                                            let seekStart = max(0, event.startOffsetSeconds - 5.0)
+                                            try recorderService.play(url: url, startingAt: seekStart, eventID: event.id)
+                                        } catch {
+                                            playbackError = error.localizedDescription
+                                        }
+                                    } label: {
+                                        HStack {
+                                            Image(systemName: event.type == .apneaPause ? "pause.circle.fill" : "waveform")
+                                                .foregroundStyle(event.type == .apneaPause ? .red : .orange)
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(event.type.localizedTitle)
+                                                    .font(.subheadline.bold())
+                                                    .foregroundStyle(.primary)
+                                                Text(formatEventTime(event.startOffsetSeconds))
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            Spacer()
+                                            Text(String(format: "%.0fs", event.durationSeconds))
+                                                .font(.subheadline.monospacedDigit())
                                                 .foregroundStyle(.secondary)
+                                            if hasAudioFile {
+                                                Image(systemName: isThisEventPlaying ? "stop.circle.fill" : "play.circle")
+                                                    .foregroundStyle(isThisEventPlaying ? .red : .blue)
+                                                    .font(.title3)
+                                            }
                                         }
-                                        Spacer()
-                                        Text(String(format: "%.0fs", event.durationSeconds))
-                                            .font(.subheadline.monospacedDigit())
-                                            .foregroundStyle(.secondary)
-                                        if hasAudioFile {
-                                            Image(systemName: isThisEventPlaying ? "stop.circle.fill" : "play.circle")
-                                                .foregroundStyle(isThisEventPlaying ? .red : .blue)
-                                                .font(.title3)
-                                        }
+                                        .padding(.vertical, 4)
                                     }
-                                    .padding(.vertical, 4)
+                                    .buttonStyle(.plain)
+                                    .disabled(!hasAudioFile || recorderService.isRecording)
+                                    Divider()
                                 }
-                                .buttonStyle(.plain)
-                                .disabled(!hasAudioFile)
-                                Divider()
                             }
                         }
                     }
@@ -250,7 +252,9 @@ struct SessionDetailView: View {
                     }
                     .buttonStyle(.bordered)
 
-                    SleepCareGoodsSection()
+                    if session.audioRiskCategory != .high {
+                        SleepCareGoodsSection()
+                    }
 
                     DisclaimerBanner()
                 }
@@ -263,6 +267,9 @@ struct SessionDetailView: View {
                 editableTags = session.tags
                 morningRating = session.morningRating
                 noteText = session.note
+            }
+            .onDisappear {
+                saveJournalIfNeeded()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -308,10 +315,17 @@ struct SessionDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func formatOffset(_ seconds: TimeInterval) -> String {
-        let total = Int(seconds)
-        let mins = total / 60
-        let secs = total % 60
-        return String(format: "%02d:%02d", mins, secs)
+    private func saveJournalIfNeeded() {
+        guard !session.isSimulated else { return }
+        appState.updateAudioSessionJournal(
+            sessionID: session.id,
+            morningRating: morningRating,
+            note: noteText
+        )
+    }
+
+    private func formatEventTime(_ seconds: TimeInterval) -> String {
+        let actualTime = session.recordedAt.addingTimeInterval(seconds)
+        return actualTime.formatted(date: .omitted, time: .shortened)
     }
 }

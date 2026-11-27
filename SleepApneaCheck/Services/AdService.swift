@@ -1,11 +1,15 @@
 import AppTrackingTransparency
 import Foundation
 import os
+import UIKit
 #if canImport(GoogleMobileAds)
 import GoogleMobileAds
 #endif
+#if canImport(UserMessagingPlatform)
+import UserMessagingPlatform
+#endif
 
-/// Google AdMob 広告の初期化と ATT（トラッキング許可）を管理するサービス
+/// Google AdMob 広告の初期化と UMP（EEA/UK同意）・ATT（トラッキング許可）を管理するサービス
 @MainActor
 final class AdService: ObservableObject {
     /// バナー広告ユニット ID（DEBUG 時はテスト広告、Release 本番ビルドでは本番 ID を使用）
@@ -18,16 +22,23 @@ final class AdService: ObservableObject {
     @Published private(set) var isInitialized = false
     private let logger = Logger(subsystem: "com.naritamasayuki.sleepapneacheck", category: "AdService")
 
-    /// ATT 許可を確認した上で AdMob SDK を初期化する
+    /// UMP 同意確認 → ATT 許可確認 → AdMob SDK 初期化の順で安全に実行する
     func configureIfNeeded() async {
         guard !isInitialized else { return }
 
+        // 1. EEA/UK 向け UMP 同意情報の確認（Google CMP 要件対応）
+        #if canImport(UserMessagingPlatform)
+        await requestUMPConsentIfNeeded()
+        #endif
+
+        // 2. ATT（トラッキング許可）の確認
         if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
             // 画面描画が安定してから ATT ダイアログを表示
-            try? await Task.sleep(nanoseconds: 600_000_000)
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
             _ = await ATTrackingManager.requestTrackingAuthorization()
         }
 
+        // 3. AdMob SDK の初期化
         #if canImport(GoogleMobileAds)
         await withCheckedContinuation { continuation in
             MobileAds.shared.start { status in
@@ -40,4 +51,28 @@ final class AdService: ObservableObject {
 
         isInitialized = true
     }
+
+    #if canImport(UserMessagingPlatform)
+    private func requestUMPConsentIfNeeded() async {
+        let parameters = RequestParameters()
+        parameters.isTaggedForUnderAgeOfConsent = false
+
+        do {
+            try await ConsentInformation.shared.requestConsentInfoUpdate(with: parameters)
+            if let rootVC = Self.activeRootViewController {
+                try await ConsentForm.loadAndPresentIfRequired(from: rootVC)
+            }
+        } catch {
+            logger.warning("UMP 同意処理スキップ: \(error.localizedDescription)")
+        }
+    }
+
+    private static var activeRootViewController: UIViewController? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)?
+            .rootViewController
+    }
+    #endif
 }

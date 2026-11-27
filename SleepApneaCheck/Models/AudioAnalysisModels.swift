@@ -127,11 +127,13 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     var morningRating: Int?
     /// 起床時のひとことメモ
     var note: String
+    /// 録音中の割り込み（着信・アラーム等）回数
+    var interruptionCount: Int
 
     enum CodingKeys: String, CodingKey {
         case id, recordedAt, durationSeconds, audioFileName, events, normalizedLevels
         case snoringDurationSeconds, apneaPauseCount, longestPauseSeconds, isSimulated
-        case tags, morningRating, note
+        case tags, morningRating, note, interruptionCount
     }
 
     init(from decoder: Decoder) throws {
@@ -146,10 +148,17 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         apneaPauseCount = try container.decode(Int.self, forKey: .apneaPauseCount)
         longestPauseSeconds = try container.decode(TimeInterval.self, forKey: .longestPauseSeconds)
         isSimulated = try container.decode(Bool.self, forKey: .isSimulated)
-        // 旧バージョン保存データとの後方互換性を維持
-        tags = try container.decodeIfPresent([SleepCareTag].self, forKey: .tags) ?? []
+        // 旧バージョン保存データや未知のタグ値との後方互換性を維持
+        let rawTagStrings = try container.decodeIfPresent([String].self, forKey: .tags) ?? []
+        tags = rawTagStrings.compactMap(SleepCareTag.init(rawValue:))
         morningRating = try container.decodeIfPresent(Int.self, forKey: .morningRating)
         note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
+        interruptionCount = try container.decodeIfPresent(Int.self, forKey: .interruptionCount) ?? 0
+    }
+
+    /// 実録音で十分な長さ（1時間以上）がない場合の参考データ判定
+    var isShortRecording: Bool {
+        !isSimulated && durationSeconds > 0 && durationSeconds < 3600
     }
 
     /// 競合定番の「いびきスコア (0〜100)」を算出する（値が大きいほどいびき・呼吸乱れが強い）
@@ -180,6 +189,13 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
 
     /// 簡易的な音声所見リスク評価
     var audioRiskCategory: ApneaRiskLevel {
+        // 実録音が短時間（1時間未満）の場合は1時間換算が過大になりやすいため高リスク誤判定を防ぐ
+        if isShortRecording {
+            if apneaPauseCount >= 2 || snoringPercentage >= 25 {
+                return .intermediate
+            }
+            return .low
+        }
         let index = estimatedEventsPerHour
         if index >= 15 || longestPauseSeconds >= 20 {
             return .high
@@ -203,7 +219,8 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         isSimulated: Bool = false,
         tags: [SleepCareTag] = [],
         morningRating: Int? = nil,
-        note: String = ""
+        note: String = "",
+        interruptionCount: Int = 0
     ) {
         self.id = id
         self.recordedAt = recordedAt
@@ -218,5 +235,6 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         self.tags = tags
         self.morningRating = morningRating
         self.note = note
+        self.interruptionCount = interruptionCount
     }
 }

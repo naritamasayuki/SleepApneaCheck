@@ -19,16 +19,17 @@ struct TagEffectivenessSummary: Identifiable, Equatable, Sendable {
 
 /// 過去の睡眠録音履歴から「どの対策が効いているか／何が悪化要因か」を分析するサービス
 enum RemedyAnalyticsService {
-    /// タグ別の平均いびきスコアおよびタグなし時との差分を算出する
+    /// タグ別の平均いびきスコアおよびタグなし時との差分を算出する（デモ結果は除外）
     static func analyze(sessions: [SleepAudioSession]) -> [TagEffectivenessSummary] {
-        guard !sessions.isEmpty else { return [] }
+        let realSessions = sessions.filter { !$0.isSimulated }
+        guard !realSessions.isEmpty else { return [] }
 
         var results: [TagEffectivenessSummary] = []
         for tag in SleepCareTag.allCases {
-            let withTag = sessions.filter { $0.tags.contains(tag) }
+            let withTag = realSessions.filter { $0.tags.contains(tag) }
             guard !withTag.isEmpty else { continue }
 
-            let withoutTag = sessions.filter { !$0.tags.contains(tag) }
+            let withoutTag = realSessions.filter { !$0.tags.contains(tag) }
             let avgWith = Double(withTag.map(\.snoreScore).reduce(0, +)) / Double(withTag.count)
             let avgWithout: Double? = withoutTag.isEmpty
                 ? nil

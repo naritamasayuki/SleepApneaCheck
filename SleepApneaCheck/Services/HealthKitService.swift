@@ -13,6 +13,17 @@ final class HealthKitService: ObservableObject {
 
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "com.naritamasayuki.sleepapneacheck", category: "HealthKitService")
+    private static let authorizedKey = "healthkit_previously_authorized"
+
+    init() {
+        self.isAuthorized = UserDefaults.standard.bool(forKey: Self.authorizedKey)
+    }
+
+    /// 過去に連携済みであればアプリ起動時に自動で最新メトリクスを更新する
+    func refreshIfPreviouslyAuthorized() async {
+        guard isAvailable, isAuthorized else { return }
+        await refreshLatestMetrics()
+    }
 
     /// HealthKit の読み取り権限をリクエストし、最新データを取得する
     func requestAuthorizationAndRefresh() async {
@@ -32,6 +43,7 @@ final class HealthKitService: ObservableObject {
         do {
             try await healthStore.requestAuthorization(toShare: [], read: readTypes)
             isAuthorized = true
+            UserDefaults.standard.set(true, forKey: Self.authorizedKey)
             errorMessage = nil
             await refreshLatestMetrics()
         } catch {
