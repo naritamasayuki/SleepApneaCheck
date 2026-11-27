@@ -6364,6 +6364,482 @@
           }
         }
       }
+    },
+    "onboarding.page1.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Sleep Breathing Tonight"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今夜のいびきと呼吸をチェック"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今晚检测睡眠鼾声与呼吸"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今晚檢測睡眠鼾聲與呼吸"
+          }
+        }
+      }
+    },
+    "onboarding.page1.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combine quick medical screening questionnaires with overnight bedside audio monitoring to visualize snoring and 10+ second breathing pauses."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡単な問診チェックと枕元での夜間録音を組み合わせて、いびきや10秒以上の呼吸停止傾向を見える化します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结合快速问卷筛查与床头整夜录音，直观展示打鼾与10秒以上的呼吸暂停倾向。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結合快速問卷篩檢與床頭整夜錄音，直覺呈現打鼾與10秒以上的呼吸中止傾向。"
+          }
+        }
+      }
+    },
+    "onboarding.page2.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedside Recording Checklist"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜間録音の準備ポイント"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜间录音准备清单"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜間錄音準備清單"
+          }
+        }
+      }
+    },
+    "onboarding.page2.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep your iPhone plugged in with the microphone facing you. Close other audio apps and record for at least 1 hour (overnight recommended) for reliable trends."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "充電ケーブルを繋ぎ、マイクを自分側に向けて枕元に置いてください。他の音声アプリを止め、最低1時間以上（一晩推奨）録音すると傾向が正確になります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请连接充电器并将麦克风朝向自己放在床头。关闭其他音频应用，建议整夜录音（至少1小时以上）以获得可靠趋势。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請連接充電器並將麥克風朝向自己放在床頭。關閉其他音訊應用程式，建議整夜錄音（至少1小時以上）以獲得可靠趨勢。"
+          }
+        }
+      }
+    },
+    "onboarding.page3.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doctor-Ready PDF & Disclaimer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受診用PDF出力とご注意"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就医PDF报告与免责声明"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就醫PDF報告與免責聲明"
+          }
+        }
+      }
+    },
+    "onboarding.page3.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export A4 PDF summaries for sleep specialists anytime. This app is a self-check aid—not a medical device or substitute for polysomnography (PSG)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴や録音結果はA4の医師提出用PDFとして書き出せます。本アプリはセルフチェック補助ツールであり、医療機器や精密検査（PSG）の代替ではありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随时导出A4就医PDF报告供专科医生参考。本应用仅作自我筛查辅助工具，非医疗器械，不能替代多导睡眠监测（PSG）。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隨時匯出A4就醫PDF報告供專科醫師參考。本應用程式僅作自我篩檢輔助工具，非醫療器材，不能替代多導睡眠檢查（PSG）。"
+          }
+        }
+      }
+    },
+    "onboarding.button.next" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次へ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一步"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一步"
+          }
+        }
+      }
+    },
+    "onboarding.button.start_monitor" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Sleep Recording"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今夜の録音画面へ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往睡眠录音"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往睡眠錄音"
+          }
+        }
+      }
+    },
+    "onboarding.button.skip" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start with Questionnaire"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あとで（問診から始める）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先进行问卷"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先進行問卷"
+          }
+        }
+      }
+    },
+    "quickcheck.button.to_monitor" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verify with Overnight Recording"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今夜、睡眠録音で確認する"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今晚用睡眠录音确认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今晚用睡眠錄音確認"
+          }
+        }
+      }
+    },
+    "monitor.orphan.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unanalyzed Recording Found"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未解析の録音ファイルが見つかりました"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发现未分析的录音文件"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發現未分析的錄音檔案"
+          }
+        }
+      }
+    },
+    "monitor.orphan.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A previous recording did not finish analyzing (for example due to app termination). You can analyze it now or discard it to free space."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "強制終了などで解析が完了しなかった前回の録音データが残っています。今すぐ解析するか、削除して容量を空けることができます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次录音因应用中断等原因未能完成分析。您可以立即进行分析，或删除以释放存储空间。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次錄音因應用程式中斷等原因未能完成分析。您可以立即進行分析，或刪除以釋放儲存空間。"
+          }
+        }
+      }
+    },
+    "monitor.orphan.analyze" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyze Now"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析する"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即分析"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即分析"
+          }
+        }
+      }
+    },
+    "monitor.orphan.discard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "破棄する"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "丢弃"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "捨棄"
+          }
+        }
+      }
+    },
+    "session.interruption_notice %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld audio interruption(s) occurred (call/alarm). Event timestamps are automatically adjusted."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "録音中に%lld回の割り込み（着信・アラーム等）がありました。イベント時刻は自動補正済みです。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录音期间发生%lld次中断（来电或闹钟等），事件时间已自动校准。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "錄音期間發生%lld次中斷（來電或鬧鐘等），事件時間已自動校準。"
+          }
+        }
+      }
+    },
+    "settings.references.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "References & Methodology"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "判定指標・出典について"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "参考标准与方法说明"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "參考標準與方法說明"
+          }
+        }
+      }
+    },
+    "settings.references.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questionnaires reference STOP-Bang (Chung F, et al., 2008/2012) and Epworth Sleepiness Scale (Johns MW, 1991). Audio metrics are smartphone microphone reference estimates and cannot replace clinical polysomnography (PSG)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細問診は STOP-Bang（Chung F et al., 2008/2012）および Epworth 眠気尺度（Johns MW, 1991）を参照しています。音声指標はスマホのマイクによる参考値であり、精密検査（PSG）の代替にはなりません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "详细问卷参考 STOP-Bang（Chung F 等，2008/2012）和 Epworth 嗜睡量表（Johns MW，1991）。音频指标仅为手机麦克风参考估算值，不能替代临床多导睡眠监测（PSG）。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細問卷參考 STOP-Bang（Chung F 等，2008/2012）與 Epworth 嗜睡量表（Johns MW，1991）。音訊指標僅為手機麥克風參考估算值，不能替代臨床多導睡眠檢查（PSG）。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

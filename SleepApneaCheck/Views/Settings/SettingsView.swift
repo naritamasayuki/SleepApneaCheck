@@ -109,6 +109,15 @@ struct SettingsView: View {
                         legalDocument = .termsOfUse
                     }
 
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(String(localized: "settings.references.title"))
+                            .font(.subheadline.bold())
+                        Text(String(localized: "settings.references.body"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+
                     if adService.isPrivacyOptionsRequired {
                         Button(String(localized: "settings.privacy_options")) {
                             Task { await adService.presentPrivacyOptions() }
@@ -152,6 +161,11 @@ struct SettingsView: View {
                 Button(String(localized: "common.cancel"), role: .cancel) {}
             }
             .alert(String(localized: "common.error"), isPresented: $notificationDeniedAlert) {
+                Button(String(localized: "monitor.permission.open_settings")) {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
                 Button(String(localized: "common.ok"), role: .cancel) {}
             } message: {
                 Text(String(localized: "settings.reminder.permission_denied"))

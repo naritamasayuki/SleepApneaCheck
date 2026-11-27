@@ -4,7 +4,9 @@ import UserNotifications
 
 /// 就寝前リマインダー通知を管理するサービス
 @MainActor
-final class NotificationService: ObservableObject {
+final class NotificationService: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+    @Published var shouldOpenMonitorTab = false
+
     @Published var isReminderEnabled: Bool {
         didSet {
             UserDefaults.standard.set(isReminderEnabled, forKey: Self.enabledKey)
@@ -30,13 +32,26 @@ final class NotificationService: ObservableObject {
 
     private let logger = Logger(subsystem: "com.sleepapneacheck.app", category: "NotificationService")
 
-    init() {
+    override init() {
         let defaults = UserDefaults.standard
         self.isReminderEnabled = defaults.bool(forKey: Self.enabledKey)
         let savedHour = defaults.object(forKey: Self.hourKey) as? Int
         let savedMinute = defaults.object(forKey: Self.minuteKey) as? Int
         self.reminderHour = savedHour ?? 22
         self.reminderMinute = savedMinute ?? 30
+        super.init()
+        UNUserNotificationCenter.current().delegate = self
+    }
+
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        Task { @MainActor [weak self] in
+            self?.shouldOpenMonitorTab = true
+        }
+        completionHandler()
     }
 
     /// 通知権限を要求し、毎日のリマインダーをスケジュールする

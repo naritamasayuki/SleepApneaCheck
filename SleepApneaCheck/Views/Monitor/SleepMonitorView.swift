@@ -14,6 +14,7 @@ struct SleepMonitorView: View {
     @State private var delayMinutes: Int = 0
     @State private var recorderErrorMessage: String?
     @State private var showPermissionSettingsAlert = false
+    @State private var orphanedAudioURLs: [URL] = []
 
     private let delayOptions = [0, 10, 20, 30]
 
@@ -26,6 +27,39 @@ struct SleepMonitorView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     DisclaimerBanner()
+
+                    if let firstOrphan = orphanedAudioURLs.first, !recorderService.isRecording, !isAnalyzing {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label(String(localized: "monitor.orphan.title"), systemImage: "waveform.badge.exclamationmark")
+                                .font(.subheadline.bold())
+                                .foregroundStyle(.orange)
+                            Text(String(localized: "monitor.orphan.description"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            HStack(spacing: 10) {
+                                Button(role: .destructive) {
+                                    discardOrphanedAudio(at: firstOrphan)
+                                } label: {
+                                    Text(String(localized: "monitor.orphan.discard"))
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+
+                                Button {
+                                    Task {
+                                        await recoverOrphanedAudio(at: firstOrphan)
+                                    }
+                                } label: {
+                                    Text(String(localized: "monitor.orphan.analyze"))
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+                        }
+                        .padding()
+                        .background(Color.orange.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
 
                     // 録音ステータスカード
                     VStack(spacing: 16) {
@@ -174,6 +208,9 @@ struct SleepMonitorView: View {
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session, recorderService: recorderService)
             }
+            .onAppear {
+                refreshOrphanedAudioURLs()
+            }
             .alert(
                 String(localized: "common.error"),
                 isPresented: Binding(
@@ -295,6 +332,24 @@ struct SleepMonitorView: View {
         } catch {
             recorderErrorMessage = error.localizedDescription
         }
+    }
+
+    private func refreshOrphanedAudioURLs() {
+        guard !recorderService.isRecording else { return }
+        let referenced = Set(appState.audioSessions.compactMap(\.audioFileName))
+        orphanedAudioURLs = appState.repository.orphanedAudioFileURLs(referencedFileNames: referenced)
+    }
+
+    private func recoverOrphanedAudio(at url: URL) async {
+        let attrs = try? FileManager.default.attributesOfItem(atPath: url.path)
+        let startedAt = (attrs?[.creationDate] as? Date) ?? Date()
+        await analyzeRecording(at: url, startedAt: startedAt, ignoreInitialSeconds: 0, interruptionCount: 0)
+        refreshOrphanedAudioURLs()
+    }
+
+    private func discardOrphanedAudio(at url: URL) {
+        try? FileManager.default.removeItem(at: url)
+        refreshOrphanedAudioURLs()
     }
 
     private func runSimulatedAnalysis() {

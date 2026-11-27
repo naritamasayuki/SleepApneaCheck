@@ -25,6 +25,7 @@
 		6E219289499D1AC55DA1761F /* HealthKitService.swift */ = {isa = PBXBuildFile; fileRef = BCBF76DB796C18521D56021D /* HealthKitService.swift */; };
 		6C4E48F76F377C0E7034A20A /* RemedyAnalyticsService.swift */ = {isa = PBXBuildFile; fileRef = 352FDDF4667FD0CCB91A1547 /* RemedyAnalyticsService.swift */; };
 		6721E0D5C5A02C4CD9E5D669 /* DisclaimerBanner.swift */ = {isa = PBXBuildFile; fileRef = D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */; };
+		A1B2C3D4E5F6000100000001 /* OnboardingView.swift */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000100000002 /* OnboardingView.swift */; };
 		124854FE21CADFE5D9663811 /* ScoreGaugeView.swift */ = {isa = PBXBuildFile; fileRef = F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */; };
 		7EB5D5DF39A0141BEBC74FE7 /* AdBannerView.swift */ = {isa = PBXBuildFile; fileRef = 087DD18DD2E61E22819726D0 /* AdBannerView.swift */; };
 		C95F3ABDE8C51373AB67B9DA /* SleepCareGoodsSection.swift */ = {isa = PBXBuildFile; fileRef = 04C70DD1FB968AD9CD11CE9A /* SleepCareGoodsSection.swift */; };
@@ -87,6 +88,7 @@
 		BCBF76DB796C18521D56021D /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/HealthKitService.swift; sourceTree = SOURCE_ROOT; };
 		352FDDF4667FD0CCB91A1547 /* RemedyAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Services/RemedyAnalyticsService.swift; sourceTree = SOURCE_ROOT; };
 		D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/DisclaimerBanner.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F6000100000002 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/OnboardingView.swift; sourceTree = SOURCE_ROOT; };
 		F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/ScoreGaugeView.swift; sourceTree = SOURCE_ROOT; };
 		087DD18DD2E61E22819726D0 /* AdBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/AdBannerView.swift; sourceTree = SOURCE_ROOT; };
 		04C70DD1FB968AD9CD11CE9A /* SleepCareGoodsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepApneaCheck/Views/Components/SleepCareGoodsSection.swift; sourceTree = SOURCE_ROOT; };
@@ -164,6 +166,7 @@
 				BCBF76DB796C18521D56021D /* HealthKitService.swift */,
 				352FDDF4667FD0CCB91A1547 /* RemedyAnalyticsService.swift */,
 				D352DF7E7557444A2E06D4DC /* DisclaimerBanner.swift */,
+				A1B2C3D4E5F6000100000002 /* OnboardingView.swift */,
 				F80B419CA49FDDA64A766E34 /* ScoreGaugeView.swift */,
 				087DD18DD2E61E22819726D0 /* AdBannerView.swift */,
 				04C70DD1FB968AD9CD11CE9A /* SleepCareGoodsSection.swift */,
@@ -304,6 +307,7 @@
 				6E219289499D1AC55DA1761F /* HealthKitService.swift */,
 				6C4E48F76F377C0E7034A20A /* RemedyAnalyticsService.swift */,
 				6721E0D5C5A02C4CD9E5D669 /* DisclaimerBanner.swift */,
+				A1B2C3D4E5F6000100000001 /* OnboardingView.swift */,
 				124854FE21CADFE5D9663811 /* ScoreGaugeView.swift */,
 				7EB5D5DF39A0141BEBC74FE7 /* AdBannerView.swift */,
 				C95F3ABDE8C51373AB67B9DA /* SleepCareGoodsSection.swift */,
@@ -383,7 +387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SleepApneaCheck/Resources/SleepApneaCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 4KR684T6KV;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
@@ -402,7 +406,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SleepApneaCheck/Resources/SleepApneaCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 4KR684T6KV;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SleepApneaCheck/Resources/Info.plist;
@@ -420,7 +424,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -435,7 +439,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.naritamasayuki.sleepapneacheck.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

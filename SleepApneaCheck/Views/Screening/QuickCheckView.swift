@@ -2,14 +2,20 @@ import SwiftUI
 
 /// 5問でできる睡眠時無呼吸の簡易判定ビュー（結果内に免責事項を表示）
 struct QuickCheckView: View {
-    @State private var answers: [QuickCheckAnswer] = Array(
-        repeating: .no,
+    @State private var answers: [QuickCheckAnswer?] = Array(
+        repeating: nil,
         count: QuickCheckQuestion.allCases.count
     )
     @State private var quickResult: QuickCheckResult?
 
     /// 詳細問診タブへの切り替えコールバック
     var onSwitchToDetailed: () -> Void
+    /// 睡眠録音タブへの移動コールバック
+    var onStartSleepMonitor: () -> Void = {}
+
+    private var allAnswered: Bool {
+        answers.allSatisfy { $0 != nil }
+    }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -27,7 +33,7 @@ struct QuickCheckView: View {
                                 .font(.subheadline)
                             Picker("", selection: $answers[question.rawValue]) {
                                 ForEach(QuickCheckAnswer.allCases) { option in
-                                    Text(option.localizedTitle).tag(option)
+                                    Text(option.localizedTitle).tag(Optional(option))
                                 }
                             }
                             .pickerStyle(.segmented)
@@ -42,8 +48,10 @@ struct QuickCheckView: View {
 
                 Section {
                     Button {
+                        let resolved = answers.compactMap { $0 }
+                        guard resolved.count == QuickCheckQuestion.allCases.count else { return }
                         withAnimation {
-                            quickResult = QuickCheckCalculator.evaluate(answers: answers)
+                            quickResult = QuickCheckCalculator.evaluate(answers: resolved)
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             withAnimation {
@@ -59,13 +67,14 @@ struct QuickCheckView: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .disabled(!allAnswered)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
 
                     if quickResult != nil {
                         Button(role: .destructive) {
                             withAnimation {
-                                answers = Array(repeating: .no, count: QuickCheckQuestion.allCases.count)
+                                answers = Array(repeating: nil, count: QuickCheckQuestion.allCases.count)
                                 quickResult = nil
                             }
                         } label: {
@@ -111,6 +120,14 @@ struct QuickCheckView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.orange.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
+
+                            Button {
+                                onStartSleepMonitor()
+                            } label: {
+                                Label(String(localized: "quickcheck.button.to_monitor"), systemImage: "waveform.and.mic")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
 
                             Button {
                                 onSwitchToDetailed()

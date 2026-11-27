@@ -5,6 +5,7 @@ import SwiftUI
 struct SessionDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var healthKitService: HealthKitService
     let session: SleepAudioSession
     @ObservedObject var recorderService: AudioRecorderService
 
@@ -12,6 +13,8 @@ struct SessionDetailView: View {
     @State private var editableTags: [SleepCareTag] = []
     @State private var morningRating: Int?
     @State private var noteText: String = ""
+    @State private var nightLowestSpO2: Double?
+    @State private var renderedShareCard: Image?
     @FocusState private var isNoteFocused: Bool
 
     private var audioURL: URL? {
@@ -83,6 +86,25 @@ struct SessionDetailView: View {
                                 value: Duration.seconds(Int(session.longestPauseSeconds))
                                     .formatted(.units(allowed: [.seconds], width: .narrow))
                             )
+                        }
+                        if session.interruptionCount > 0 {
+                            Label(
+                                String(localized: "session.interruption_notice \(session.interruptionCount)"),
+                                systemImage: "exclamationmark.triangle.fill"
+                            )
+                            .font(.caption2)
+                            .foregroundStyle(.orange)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        if let spo2 = nightLowestSpO2 {
+                            Label(
+                                String(format: "Apple Health 最低 SpO2: %.0f%%", spo2),
+                                systemImage: "heart.fill"
+                            )
+                            .font(.caption.bold())
+                            .foregroundStyle(.pink)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     .padding()
@@ -177,6 +199,25 @@ struct SessionDetailView: View {
                                     saveJournalIfNeeded()
                                 }
                             }
+                        if session.interruptionCount > 0 {
+                            Label(
+                                String(localized: "session.interruption_notice \(session.interruptionCount)"),
+                                systemImage: "exclamationmark.triangle.fill"
+                            )
+                            .font(.caption2)
+                            .foregroundStyle(.orange)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        if let spo2 = nightLowestSpO2 {
+                            Label(
+                                String(format: "Apple Health 最低 SpO2: %.0f%%", spo2),
+                                systemImage: "heart.fill"
+                            )
+                            .font(.caption.bold())
+                            .foregroundStyle(.pink)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                     .padding()
                     .background(Color(.secondarySystemGroupedBackground))
@@ -243,10 +284,43 @@ struct SessionDetailView: View {
                                 }
                             }
                         }
+                        if session.interruptionCount > 0 {
+                            Label(
+                                String(localized: "session.interruption_notice \(session.interruptionCount)"),
+                                systemImage: "exclamationmark.triangle.fill"
+                            )
+                            .font(.caption2)
+                            .foregroundStyle(.orange)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        if let spo2 = nightLowestSpO2 {
+                            Label(
+                                String(format: "Apple Health 最低 SpO2: %.0f%%", spo2),
+                                systemImage: "heart.fill"
+                            )
+                            .font(.caption.bold())
+                            .foregroundStyle(.pink)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                     .padding()
                     .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                    if let cardImage = renderedShareCard {
+                        ShareLink(
+                            item: cardImage,
+                            preview: SharePreview(
+                                String(localized: "share.card.title"),
+                                image: cardImage
+                            )
+                        ) {
+                            Label(String(localized: "share.card.button"), systemImage: "photo.on.rectangle.angled")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
 
                     ShareLink(item: shareSummaryText) {
                         Label(String(localized: "screening.result.share"), systemImage: "square.and.arrow.up")
@@ -269,6 +343,12 @@ struct SessionDetailView: View {
                 editableTags = session.tags
                 morningRating = session.morningRating
                 noteText = session.note
+                renderedShareCard = ShareableResultCard.renderAudioSessionImage(for: session)
+            }
+            .task {
+                guard !session.isSimulated, session.durationSeconds > 0 else { return }
+                let end = session.recordedAt.addingTimeInterval(session.durationSeconds)
+                nightLowestSpO2 = await healthKitService.fetchLowestOxygenSaturation(from: session.recordedAt, to: end)
             }
             .onDisappear {
                 saveJournalIfNeeded()

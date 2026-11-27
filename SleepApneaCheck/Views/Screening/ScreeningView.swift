@@ -5,6 +5,7 @@ import SwiftUI
 struct ScreeningView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.requestReview) private var requestReview
+    var onStartSleepMonitor: () -> Void = {}
 
     private enum FocusField {
         case height
@@ -49,11 +50,14 @@ struct ScreeningView: View {
                 .padding(.vertical, 8)
 
                 if mode == 0 {
-                    QuickCheckView {
-                        withAnimation {
-                            mode = 1
-                        }
-                    }
+                    QuickCheckView(
+                        onSwitchToDetailed: {
+                            withAnimation {
+                                mode = 1
+                            }
+                        },
+                        onStartSleepMonitor: onStartSleepMonitor
+                    )
                 } else {
                     detailedForm
                 }

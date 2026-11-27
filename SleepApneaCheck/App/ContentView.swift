@@ -3,15 +3,20 @@ import SwiftUI
 /// メインの4タブ構成ビュー
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var notificationService: NotificationService
+    @AppStorage("has_seen_onboarding") private var hasSeenOnboarding = false
     @State private var selectedTab = 0
+    @State private var showOnboarding = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            ScreeningView()
-                .tabItem {
-                    Label(String(localized: "tab.screening"), systemImage: "checklist")
-                }
-                .tag(0)
+            ScreeningView(onStartSleepMonitor: {
+                selectedTab = 1
+            })
+            .tabItem {
+                Label(String(localized: "tab.screening"), systemImage: "checklist")
+            }
+            .tag(0)
 
             SleepMonitorView()
                 .tabItem {
@@ -30,6 +35,23 @@ struct ContentView: View {
                     Label(String(localized: "tab.settings"), systemImage: "gearshape")
                 }
                 .tag(3)
+        }
+        .onAppear {
+            if !hasSeenOnboarding {
+                showOnboarding = true
+                hasSeenOnboarding = true
+            }
+        }
+        .onChange(of: notificationService.shouldOpenMonitorTab) { _, shouldOpen in
+            if shouldOpen {
+                selectedTab = 1
+                notificationService.shouldOpenMonitorTab = false
+            }
+        }
+        .sheet(isPresented: $showOnboarding) {
+            OnboardingView {
+                selectedTab = 1
+            }
         }
         .alert(
             String(localized: "common.error"),

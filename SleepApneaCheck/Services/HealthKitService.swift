@@ -130,6 +130,42 @@ final class HealthKitService: ObservableObject {
         }
     }
 
+    /// 指定した録音時間帯（前後1時間の余裕を含む）の最低血中酸素飽和度を取得する
+    func fetchLowestOxygenSaturation(from startDate: Date, to endDate: Date) async -> Double? {
+        guard isAvailable, isAuthorized,
+              let spo2Type = HKObjectType.quantityType(forIdentifier: .oxygenSaturation) else {
+            return nil
+        }
+
+        let windowStart = startDate.addingTimeInterval(-1800)
+        let windowEnd = endDate.addingTimeInterval(1800)
+        let predicate = HKQuery.predicateForSamples(withStart: windowStart, end: windowEnd, options: [])
+
+        return await withCheckedContinuation { continuation in
+            let query = HKSampleQuery(
+                sampleType: spo2Type,
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: nil
+            ) { [weak self] _, samples, error in
+                if let error {
+                    self?.logger.warning("HealthKit セッション内SpO2取得失敗: \(error.localizedDescription)")
+                    continuation.resume(returning: nil)
+                    return
+                }
+                guard let quantitySamples = samples as? [HKQuantitySample], !quantitySamples.isEmpty else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let lowest = quantitySamples
+                    .map { $0.quantity.doubleValue(for: HKUnit.percent()) * 100.0 }
+                    .min()
+                continuation.resume(returning: lowest)
+            }
+            healthStore.execute(query)
+        }
+    }
+
     private func fetchLatestOxygenSaturation() async -> (percent: Double, date: Date)? {
         guard let spo2Type = HKObjectType.quantityType(forIdentifier: .oxygenSaturation) else {
             return nil
