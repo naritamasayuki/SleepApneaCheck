@@ -2,7 +2,7 @@
 
 ## 1. 提出前チェックリスト（実装・設定済み項目）
 - [x] **アプリアイコン**: `1024x1024` 不透明PNG（`AppIcon.png`）を `Assets.xcassets/AppIcon.appiconset` に配置済み
-- [x] **Privacy Manifest**: `SleepApneaCheck/Resources/PrivacyInfo.xcprivacy` を作成・組み込み済み（`NSPrivacyTracking = true`、AdMob 収集データ型および `UserDefaults`: `CA92.1`）
+- [x] **Privacy Manifest**: `SleepApneaCheck/Resources/PrivacyInfo.xcprivacy` を組み込み済み（アプリ本体は `UserDefaults`: `CA92.1` を宣言し、広告関連は GoogleMobileAds / UserMessagingPlatform 同梱の公式 PrivacyInfo.xcprivacy に委譲）
 - [x] **輸出コンプライアンス**: `Info.plist` に `ITSAppUsesNonExemptEncryption = false` を設定済み
 - [x] **バックグラウンド録音**: `Info.plist` に `UIBackgroundModes: audio` および 4言語の `NSMicrophoneUsageDescription` を設定済み
 - [x] **医療免責事項**: 簡易判定結果内・詳細問診・録音画面・設定画面に医療機器ではない旨の免責表示を実装済み

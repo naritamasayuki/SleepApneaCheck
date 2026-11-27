@@ -2,6 +2,7 @@ import AVFoundation
 import Combine
 import Foundation
 import os
+import UIKit
 
 /// マイク録音・音声再生エラー
 enum AudioRecorderError: LocalizedError {
@@ -42,6 +43,7 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
     @Published private(set) var interruptionCount: Int = 0
     @Published private(set) var configuredDelaySeconds: TimeInterval = 0
     @Published private(set) var recordingStartedAt: Date?
+    @Published private(set) var recordingGaps: [RecordingGap] = []
 
     /// 入眠待ちディレイの残り秒数（バックグラウンド録音セッション稼働中にカウントダウン）
     var remainingDelaySeconds: Int {
@@ -57,12 +59,18 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
     private var onAutoStopLimitReached: ((URL) -> Void)?
     private var interruptionObserver: NSObjectProtocol?
     private var routeChangeObserver: NSObjectProtocol?
+    private var lifecycleObservers: [NSObjectProtocol] = []
+    private var interruptionBeganAt: Date?
+    private var interruptionFileOffset: TimeInterval = 0
+    /// フォアグラウンド 0.2 秒 / バックグラウンド 5 秒（省バッテリー化）
+    private var meterInterval: TimeInterval = 0.2
 
     private let logger = Logger(subsystem: "com.sleepapneacheck.app", category: "AudioRecorderService")
 
     override init() {
         super.init()
         setupAudioSessionObservers()
+        setupLifecycleObservers()
     }
 
     deinit {
@@ -72,6 +80,7 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
         if let routeChangeObserver {
             NotificationCenter.default.removeObserver(routeChangeObserver)
         }
+        lifecycleObservers.forEach { NotificationCenter.default.removeObserver($0) }
     }
 
     /// マイク使用権限を確認・要求する
@@ -128,6 +137,8 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
             recordingStartedAt = startDate
             configuredDelaySeconds = max(0, delaySeconds)
             interruptionCount = 0
+            recordingGaps = []
+            interruptionBeganAt = nil
             elapsedSeconds = 0
             currentMeterLevel = 0
             maxDurationLimit = maxDurationSeconds
@@ -274,6 +285,8 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
         switch type {
         case .began:
             interruptionCount += 1
+            interruptionBeganAt = Date()
+            interruptionFileOffset = recorder?.currentTime ?? elapsedSeconds
             logger.warning("録音中にオーディオ割り込みが発生しました（回数: \(self.interruptionCount)）")
         case .ended:
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsRaw ?? 0)
@@ -303,22 +316,53 @@ final class AudioRecorderService: NSObject, ObservableObject, AVAudioPlayerDeleg
             try session.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .allowBluetoothHFP])
             try session.setActive(true)
             let resumed = recorder.record()
+            if resumed, let began = interruptionBeganAt {
+                recordingGaps.append(
+                    RecordingGap(
+                        fileOffsetSeconds: interruptionFileOffset,
+                        durationSeconds: Date().timeIntervalSince(began)
+                    )
+                )
+                interruptionBeganAt = nil
+            }
             logger.info("割り込み後の録音自動再開: \(resumed)")
         } catch {
             logger.error("割り込み後の録音再開に失敗: \(error.localizedDescription)")
         }
     }
 
+    private func setupLifecycleObservers() {
+        let center = NotificationCenter.default
+        lifecycleObservers.append(
+            center.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor [weak self] in self?.updateMeterInterval(5.0) }
+            }
+        )
+        lifecycleObservers.append(
+            center.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor [weak self] in self?.updateMeterInterval(0.2) }
+            }
+        )
+    }
+
+    private func updateMeterInterval(_ interval: TimeInterval) {
+        meterInterval = interval
+        if isRecording {
+            startMeteringTimer()
+        }
+    }
+
     private func startMeteringTimer() {
         meterTimer?.invalidate()
-        meterTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in
+        meterTimer = Timer.scheduledTimer(withTimeInterval: meterInterval, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
                 guard let self, let recorder = self.recorder, self.isRecording else { return }
-                recorder.updateMeters()
-                let power = Double(recorder.averagePower(forChannel: 0))
-                // -60dB〜0dB を 0.0〜1.0 に正規化
-                let normalized = max(0.0, min(1.0, (power + 60.0) / 60.0))
-                self.currentMeterLevel = normalized
+                if self.meterInterval < 1.0 {
+                    recorder.updateMeters()
+                    let power = Double(recorder.averagePower(forChannel: 0))
+                    // -60dB〜0dB を 0.0〜1.0 に正規化
+                    self.currentMeterLevel = max(0.0, min(1.0, (power + 60.0) / 60.0))
+                }
                 self.elapsedSeconds = recorder.currentTime
 
                 if let limit = self.maxDurationLimit, self.elapsedSeconds >= limit {

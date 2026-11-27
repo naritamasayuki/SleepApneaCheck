@@ -9,6 +9,7 @@ final class HealthKitService: ObservableObject {
     @Published private(set) var isAuthorized: Bool = false
     @Published private(set) var lastSleepDurationHours: Double?
     @Published private(set) var latestOxygenSaturationPercent: Double?
+    @Published private(set) var latestOxygenSaturationDate: Date?
     @Published private(set) var errorMessage: String?
 
     private let healthStore = HKHealthStore()
@@ -52,14 +53,16 @@ final class HealthKitService: ObservableObject {
         }
     }
 
-    /// 直近48時間の睡眠時間合計と最新の血中酸素飽和度を取得する
+    /// 直近36時間の睡眠時間合計（重複区間マージ済み）と直近7日以内の最新血中酸素飽和度を取得する
     func refreshLatestMetrics() async {
         guard isAvailable else { return }
         async let sleepHours = fetchLatestSleepDurationHours()
         async let spo2 = fetchLatestOxygenSaturation()
 
         lastSleepDurationHours = await sleepHours
-        latestOxygenSaturationPercent = await spo2
+        let spo2Result = await spo2
+        latestOxygenSaturationPercent = spo2Result?.percent
+        latestOxygenSaturationDate = spo2Result?.date
     }
 
     private func fetchLatestSleepDurationHours() async -> Double? {
@@ -76,7 +79,7 @@ final class HealthKitService: ObservableObject {
             let query = HKSampleQuery(
                 sampleType: sleepType,
                 predicate: predicate,
-                limit: 50,
+                limit: HKObjectQueryNoLimit,
                 sortDescriptors: [sortDescriptor]
             ) { [weak self] _, samples, error in
                 if let error {
@@ -89,16 +92,33 @@ final class HealthKitService: ObservableObject {
                     return
                 }
 
-                // 睡眠中カテゴリ（inBed 以外）の合計時間を算出
+                // 睡眠中カテゴリ（inBed 以外）について、iPhone と Apple Watch 等の重複区間を結合してから合計する
                 let asleepValues: Set<Int> = [
                     HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue,
                     HKCategoryValueSleepAnalysis.asleepCore.rawValue,
                     HKCategoryValueSleepAnalysis.asleepDeep.rawValue,
                     HKCategoryValueSleepAnalysis.asleepREM.rawValue
                 ]
-                let asleepSeconds = categorySamples
+                let intervals = categorySamples
                     .filter { asleepValues.contains($0.value) }
-                    .reduce(0.0) { $0 + $1.endDate.timeIntervalSince($1.startDate) }
+                    .map { ($0.startDate, $0.endDate) }
+                    .sorted { $0.0 < $1.0 }
+
+                var asleepSeconds: TimeInterval = 0
+                var current: (Date, Date)?
+                for interval in intervals {
+                    if let cur = current, interval.0 <= cur.1 {
+                        current = (cur.0, max(cur.1, interval.1))
+                    } else {
+                        if let cur = current {
+                            asleepSeconds += cur.1.timeIntervalSince(cur.0)
+                        }
+                        current = interval
+                    }
+                }
+                if let cur = current {
+                    asleepSeconds += cur.1.timeIntervalSince(cur.0)
+                }
 
                 guard asleepSeconds > 0 else {
                     continuation.resume(returning: nil)
@@ -110,16 +130,19 @@ final class HealthKitService: ObservableObject {
         }
     }
 
-    private func fetchLatestOxygenSaturation() async -> Double? {
+    private func fetchLatestOxygenSaturation() async -> (percent: Double, date: Date)? {
         guard let spo2Type = HKObjectType.quantityType(forIdentifier: .oxygenSaturation) else {
             return nil
         }
 
+        let end = Date()
+        let start = Calendar.current.date(byAdding: .day, value: -7, to: end) ?? end
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [])
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
         return await withCheckedContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: spo2Type,
-                predicate: nil,
+                predicate: predicate,
                 limit: 1,
                 sortDescriptors: [sortDescriptor]
             ) { [weak self] _, samples, error in
@@ -133,7 +156,7 @@ final class HealthKitService: ObservableObject {
                     return
                 }
                 let percent = sample.quantity.doubleValue(for: HKUnit.percent()) * 100.0
-                continuation.resume(returning: percent)
+                continuation.resume(returning: (percent, sample.endDate))
             }
             healthStore.execute(query)
         }

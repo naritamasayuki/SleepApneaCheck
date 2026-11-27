@@ -115,8 +115,10 @@ struct ScreeningResultView: View {
                         .buttonStyle(.bordered)
                     }
 
-                    // いびき・睡眠ケアおすすめグッズ（Amazon アソシエイト PR）
-                    SleepCareGoodsSection()
+                    // 高リスク判定時は受診案内を優先し、物販（Amazon アソシエイト PR）を表示しない
+                    if result.riskLevel != .high {
+                        SleepCareGoodsSection()
+                    }
 
                     DisclaimerBanner()
                 }

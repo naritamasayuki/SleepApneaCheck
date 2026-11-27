@@ -90,4 +90,20 @@ final class AudioAnalyzerTests: XCTestCase {
         XCTAssertTrue(session.isShortRecording)
         XCTAssertNotEqual(session.audioRiskCategory, .high)
     }
+
+    func testQuietBreathingAfterSingleEarlySnoreIsNotCountedRepeatedly() {
+        // 宵の口に3秒のいびき → 以後は「30秒の静寂＋1秒の物音」が10回続く夜でも誤検出を繰り返さないこと
+        let sampleRate = 1000.0
+        var samples: [Float] = []
+        func append(seconds: Int, amplitude: Float) {
+            samples += [Float](repeating: amplitude, count: Int(sampleRate) * seconds)
+        }
+        append(seconds: 3, amplitude: 0.05)
+        for _ in 0..<10 {
+            append(seconds: 30, amplitude: 0.0005)
+            append(seconds: 1, amplitude: 0.05)
+        }
+        let session = AudioAnalyzer.analyzeSamples(samples, sampleRate: sampleRate)
+        XCTAssertLessThanOrEqual(session.apneaPauseCount, 1)
+    }
 }

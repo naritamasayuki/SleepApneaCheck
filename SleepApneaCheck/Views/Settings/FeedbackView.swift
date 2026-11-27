@@ -89,6 +89,10 @@ struct FeedbackView: View {
                     .buttonStyle(.bordered)
                     .disabled(!canSubmit)
 
+                    Text(String(localized: "feedback.github.public_notice"))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+
                     Button {
                         UIPasteboard.general.string = "\(builtSubject)\n\n\(builtBody)"
                         copiedNotice = true

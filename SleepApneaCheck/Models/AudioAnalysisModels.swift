@@ -108,6 +108,12 @@ enum SleepCareTag: String, Codable, CaseIterable, Identifiable, Sendable {
     }
 }
 
+/// 割り込みで録音できなかった区間（解析開始からの位置と欠落時間）
+struct RecordingGap: Codable, Equatable, Sendable {
+    let fileOffsetSeconds: TimeInterval
+    let durationSeconds: TimeInterval
+}
+
 /// 睡眠録音セッションの解析結果
 struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     let id: UUID
@@ -129,11 +135,13 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
     var note: String
     /// 録音中の割り込み（着信・アラーム等）回数
     var interruptionCount: Int
+    /// 割り込みによる録音欠落区間
+    var recordingGaps: [RecordingGap]
 
     enum CodingKeys: String, CodingKey {
         case id, recordedAt, durationSeconds, audioFileName, events, normalizedLevels
         case snoringDurationSeconds, apneaPauseCount, longestPauseSeconds, isSimulated
-        case tags, morningRating, note, interruptionCount
+        case tags, morningRating, note, interruptionCount, recordingGaps
     }
 
     init(from decoder: Decoder) throws {
@@ -154,6 +162,7 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         morningRating = try container.decodeIfPresent(Int.self, forKey: .morningRating)
         note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
         interruptionCount = try container.decodeIfPresent(Int.self, forKey: .interruptionCount) ?? 0
+        recordingGaps = try container.decodeIfPresent([RecordingGap].self, forKey: .recordingGaps) ?? []
     }
 
     /// 実録音で十分な長さ（1時間以上）がない場合の参考データ判定
@@ -197,7 +206,8 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
             return .low
         }
         let index = estimatedEventsPerHour
-        if index >= 15 || longestPauseSeconds >= 20 {
+        // 単発の長い静寂だけで高リスクにせず、複数回の候補発生を条件にする
+        if index >= 15 || (longestPauseSeconds >= 20 && apneaPauseCount >= 3) {
             return .high
         } else if index >= 5 || snoringPercentage >= 25 {
             return .intermediate
@@ -220,7 +230,8 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         tags: [SleepCareTag] = [],
         morningRating: Int? = nil,
         note: String = "",
-        interruptionCount: Int = 0
+        interruptionCount: Int = 0,
+        recordingGaps: [RecordingGap] = []
     ) {
         self.id = id
         self.recordedAt = recordedAt
@@ -236,5 +247,6 @@ struct SleepAudioSession: Codable, Equatable, Identifiable, Sendable {
         self.morningRating = morningRating
         self.note = note
         self.interruptionCount = interruptionCount
+        self.recordingGaps = recordingGaps
     }
 }

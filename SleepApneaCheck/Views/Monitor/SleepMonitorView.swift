@@ -222,10 +222,17 @@ struct SleepMonitorView: View {
     private func startRecordingNow(delaySeconds: TimeInterval) async {
         do {
             let dirURL = try appState.repository.ensureAudioDirectoryURL()
+            // 空き容量が 300MB 未満なら一晩録音を開始しない
+            if let capacity = try? dirURL.resourceValues(
+                forKeys: [.volumeAvailableCapacityForImportantUsageKey]
+            ).volumeAvailableCapacityForImportantUsage, capacity < 300_000_000 {
+                recorderErrorMessage = String(localized: "error.storage.insufficient")
+                return
+            }
             try await recorderService.startRecording(
                 in: dirURL,
                 delaySeconds: delaySeconds,
-                maxDurationSeconds: nil
+                maxDurationSeconds: 12 * 3600
             ) { autoStoppedURL in
                 Task { @MainActor in
                     await analyzeRecording(
@@ -252,6 +259,7 @@ struct SleepMonitorView: View {
         isAnalyzing = true
         let sensitivity = appState.sensitivity
         let tagsToAttach = selectedTags
+        let capturedGaps = recorderService.recordingGaps
         defer { isAnalyzing = false }
 
         do {
@@ -265,12 +273,25 @@ struct SleepMonitorView: View {
                 )
             }.value
             session.tags = tagsToAttach
+            // ファイル上の位置 → 解析開始（ディレイ除外後）からの位置へ変換して保存
+            session.recordingGaps = capturedGaps
+                .map {
+                    RecordingGap(
+                        fileOffsetSeconds: $0.fileOffsetSeconds - ignoreInitialSeconds,
+                        durationSeconds: $0.durationSeconds
+                    )
+                }
+                .filter { $0.fileOffsetSeconds >= 0 }
             appState.addAudioSession(session)
             selectedSession = session
             // 高リスク判定直後の不安なタイミングではレビュー依頼を出さない
             if session.audioRiskCategory != .high && ReviewPromptService.recordActionAndShouldPrompt() {
                 requestReview()
             }
+        } catch AudioAnalyzerError.emptyAudioData {
+            // 解析対象が0秒（ディレイ直後の停止など）の録音は履歴に紐づかないため破棄
+            try? FileManager.default.removeItem(at: url)
+            recorderErrorMessage = AudioAnalyzerError.emptyAudioData.localizedDescription
         } catch {
             recorderErrorMessage = error.localizedDescription
         }

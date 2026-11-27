@@ -80,7 +80,8 @@ struct SessionDetailView: View {
                             )
                             metricBox(
                                 title: String(localized: "session.metric.longest_pause"),
-                                value: String(format: "%.0fs", session.longestPauseSeconds)
+                                value: Duration.seconds(Int(session.longestPauseSeconds))
+                                    .formatted(.units(allowed: [.seconds], width: .narrow))
                             )
                         }
                     }
@@ -224,7 +225,8 @@ struct SessionDetailView: View {
                                                     .foregroundStyle(.secondary)
                                             }
                                             Spacer()
-                                            Text(String(format: "%.0fs", event.durationSeconds))
+                                            Text(Duration.seconds(Int(event.durationSeconds))
+                                                .formatted(.units(allowed: [.seconds], width: .narrow)))
                                                 .font(.subheadline.monospacedDigit())
                                                 .foregroundStyle(.secondary)
                                             if hasAudioFile {
@@ -325,7 +327,11 @@ struct SessionDetailView: View {
     }
 
     private func formatEventTime(_ seconds: TimeInterval) -> String {
-        let actualTime = session.recordedAt.addingTimeInterval(seconds)
+        // それ以前の割り込みで録音できなかった時間を加算して実時刻へ補正
+        let missing = session.recordingGaps
+            .filter { $0.fileOffsetSeconds <= seconds }
+            .reduce(0) { $0 + $1.durationSeconds }
+        let actualTime = session.recordedAt.addingTimeInterval(seconds + missing)
         return actualTime.formatted(date: .omitted, time: .shortened)
     }
 }

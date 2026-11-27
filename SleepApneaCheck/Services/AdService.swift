@@ -20,6 +20,10 @@ final class AdService: ObservableObject {
     #endif
 
     @Published private(set) var isInitialized = false
+    /// UMP 同意状態に基づき広告リクエスト可能か（UMP 非導入環境では true）
+    @Published private(set) var canRequestAds = false
+    /// EEA/UK 等でプライバシーオプション（同意変更）の入口表示が必要か
+    @Published private(set) var isPrivacyOptionsRequired = false
     private let logger = Logger(subsystem: "com.naritamasayuki.sleepapneacheck", category: "AdService")
 
     /// UMP 同意確認 → ATT 許可確認 → AdMob SDK 初期化の順で安全に実行する
@@ -29,6 +33,10 @@ final class AdService: ObservableObject {
         // 1. EEA/UK 向け UMP 同意情報の確認（Google CMP 要件対応）
         #if canImport(UserMessagingPlatform)
         await requestUMPConsentIfNeeded()
+        canRequestAds = ConsentInformation.shared.canRequestAds
+        isPrivacyOptionsRequired = ConsentInformation.shared.privacyOptionsRequirementStatus == .required
+        #else
+        canRequestAds = true
         #endif
 
         // 2. ATT（トラッキング許可）の確認
@@ -38,7 +46,8 @@ final class AdService: ObservableObject {
             _ = await ATTrackingManager.requestTrackingAuthorization()
         }
 
-        // 3. AdMob SDK の初期化
+        // 3. AdMob SDK の初期化（同意が得られない場合は SDK を開始せず広告も出さない）
+        guard canRequestAds else { return }
         #if canImport(GoogleMobileAds)
         await withCheckedContinuation { continuation in
             MobileAds.shared.start { status in
@@ -53,6 +62,18 @@ final class AdService: ObservableObject {
     }
 
     #if canImport(UserMessagingPlatform)
+    /// UMP プライバシーオプション（広告同意の変更フォーム）を表示する
+    func presentPrivacyOptions() async {
+        guard let rootVC = Self.activeRootViewController else { return }
+        do {
+            try await ConsentForm.presentPrivacyOptionsForm(from: rootVC)
+            canRequestAds = ConsentInformation.shared.canRequestAds
+            isPrivacyOptionsRequired = ConsentInformation.shared.privacyOptionsRequirementStatus == .required
+        } catch {
+            logger.warning("UMP プライバシーオプション表示失敗: \(error.localizedDescription)")
+        }
+    }
+
     private func requestUMPConsentIfNeeded() async {
         let parameters = RequestParameters()
         parameters.isTaggedForUnderAgeOfConsent = false

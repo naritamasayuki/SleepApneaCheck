@@ -270,7 +270,9 @@ struct HistoryView: View {
                                     .font(.caption.monospacedDigit())
                             }
                             if let spo2 = healthKitService.latestOxygenSaturationPercent {
-                                Text(String(format: "SpO2 %.0f%%", spo2))
+                                let dateText = healthKitService.latestOxygenSaturationDate?
+                                    .formatted(date: .abbreviated, time: .shortened) ?? ""
+                                Text(dateText.isEmpty ? String(format: "SpO2 %.0f%%", spo2) : String(format: "SpO2 %.0f%% (%@)", spo2, dateText))
                                     .font(.caption.monospacedDigit())
                             }
                             if healthKitService.lastSleepDurationHours == nil && healthKitService.latestOxygenSaturationPercent == nil {
@@ -314,9 +316,16 @@ struct HistoryView: View {
             pdfReportURL = nil
             return
         }
-        pdfReportURL = ReportExportService.generateDoctorReportPDF(
-            screenings: appState.screenings,
-            audioSessions: appState.audioSessions
-        )
+        let screenings = appState.screenings
+        let sessions = appState.audioSessions
+        Task {
+            let url = await Task.detached(priority: .utility) {
+                ReportExportService.generateDoctorReportPDF(
+                    screenings: screenings,
+                    audioSessions: sessions
+                )
+            }.value
+            pdfReportURL = url
+        }
     }
 }

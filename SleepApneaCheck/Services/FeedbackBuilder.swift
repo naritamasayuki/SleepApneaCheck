@@ -114,8 +114,8 @@ enum FeedbackBuilder {
         message: String,
         includeDeviceInfo: Bool
     ) -> String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.0"
-        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "2"
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "unknown"
         let osVersion = UIDevice.current.systemVersion
         let localeID = Locale.current.identifier
 

@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var notificationService: NotificationService
+    @EnvironmentObject private var adService: AdService
 
     @State private var showClearConfirm = false
     @State private var notificationDeniedAlert = false
@@ -108,10 +109,16 @@ struct SettingsView: View {
                         legalDocument = .termsOfUse
                     }
 
+                    if adService.isPrivacyOptionsRequired {
+                        Button(String(localized: "settings.privacy_options")) {
+                            Task { await adService.presentPrivacyOptions() }
+                        }
+                    }
+
                     HStack {
                         Text(String(localized: "settings.version"))
                         Spacer()
-                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.0")
+                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-")
                             .foregroundStyle(.secondary)
                     }
                 }

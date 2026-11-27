@@ -112,14 +112,9 @@ enum ReportExportService {
                     let itemDate = session.recordedAt.formatted(date: .abbreviated, time: .shortened)
                     let mins = max(1, Int(session.durationSeconds / 60))
                     let tagNames = session.tags.map(\.localizedTitle).joined(separator: ", ")
+                    let perHour = String(format: "%.1f", session.estimatedEventsPerHour)
                     var line = String(
-                        format: "• %@  |  %d min  |  %.1f/h  |  Pauses: %d (Max %.0fs)  |  Snoring: %.0f%%",
-                        itemDate,
-                        mins,
-                        session.estimatedEventsPerHour,
-                        session.apneaPauseCount,
-                        session.longestPauseSeconds,
-                        session.snoringPercentage
+                        localized: "pdf.report.audio_line \(itemDate) \(mins) \(perHour) \(session.apneaPauseCount) \(Int(session.longestPauseSeconds)) \(Int(session.snoringPercentage))"
                     )
                     if !tagNames.isEmpty {
                         line += "  [\(tagNames)]"

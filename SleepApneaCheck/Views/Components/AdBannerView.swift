@@ -1,16 +1,21 @@
+import os
 import SwiftUI
 #if canImport(GoogleMobileAds)
 import GoogleMobileAds
 #endif
 
-/// 画面下部へ表示するバナー広告ビュー
+/// 画面下部へ表示するバナー広告ビュー（UMP同意およびSDK初期化完了後にのみリクエスト）
 struct AdBannerView: View {
+    @EnvironmentObject private var adService: AdService
+
     var body: some View {
         #if canImport(GoogleMobileAds)
-        AdMobBannerRepresentable(adUnitID: AdService.bannerAdUnitID)
-            .frame(height: 50)
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemBackground))
+        if adService.isInitialized && adService.canRequestAds {
+            AdMobBannerRepresentable(adUnitID: AdService.bannerAdUnitID)
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .background(Color(.secondarySystemBackground))
+        }
         #else
         EmptyView()
         #endif
@@ -43,9 +48,11 @@ private struct AdMobBannerRepresentable: UIViewRepresentable {
     }
 
     final class Coordinator: NSObject, BannerViewDelegate {
+        private let logger = Logger(subsystem: "com.naritamasayuki.sleepapneacheck", category: "AdBanner")
+
         func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
             // ネットワーク切断や広告在庫なし時もアプリをクラッシュさせない
-            print("AdMob banner load failed: \(error.localizedDescription)")
+            logger.warning("AdMob banner load failed: \(error.localizedDescription)")
         }
     }
 }

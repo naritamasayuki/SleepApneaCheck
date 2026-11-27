@@ -28,8 +28,12 @@ struct ScreeningView: View {
         ScreeningCalculator.essScore(from: essAnswers)
     }
 
+    private func parseDecimal(_ text: String) -> Double? {
+        Double(text.replacingOccurrences(of: ",", with: "."))
+    }
+
     private var computedBMI: Double? {
-        guard let h = Double(heightText), let w = Double(weightText) else { return nil }
+        guard let h = parseDecimal(heightText), let w = parseDecimal(weightText) else { return nil }
         return ScreeningCalculator.calculateBMI(heightCm: h, weightKg: w)
     }
 
@@ -202,8 +206,8 @@ struct ScreeningView: View {
     private func syncBmiToggle() {
         if let bmi = computedBMI {
             stopBang.bmiOver35 = bmi > 35.0
-            stopBang.heightCm = Double(heightText)
-            stopBang.weightKg = Double(weightText)
+            stopBang.heightCm = parseDecimal(heightText)
+            stopBang.weightKg = parseDecimal(weightText)
         }
     }
 

@@ -254,18 +254,16 @@ enum AudioAnalyzer {
         }
 
         // 2. 無呼吸候補区間の検出
-        // 誤検出削減: 単発の物音(1秒)ではなく、2秒以上のいびき(連続高音圧)の後に
-        // 10秒以上の静寂が続き、直後に呼吸再開音(しきい値以上)があるパターンのみ検出
+        // 誤検出削減: 毎回の静寂について「直前が2秒以上のいびき（連続高音圧）」だった場合のみ
+        // 10〜120秒の静寂→呼吸再開音（しきい値以上）のパターンを無呼吸候補として検出
         var consecutiveLoudSeconds = 0
-        var hasPriorSnoringPattern = false
         var silenceStart: Int?
 
         for (sec, db) in windowDecibels.enumerated() {
             if db >= snoringThresholdDb {
                 if let sStart = silenceStart {
                     let pauseDuration = TimeInterval(sec - sStart)
-                    if hasPriorSnoringPattern
-                        && pauseDuration >= minimumApneaPauseSeconds
+                    if pauseDuration >= minimumApneaPauseSeconds
                         && pauseDuration <= maximumApneaPauseSeconds {
                         apneaPauseCount += 1
                         longestPause = max(longestPause, pauseDuration)
@@ -279,18 +277,14 @@ enum AudioAnalyzer {
                         )
                     }
                     silenceStart = nil
-                    consecutiveLoudSeconds = 1
-                } else {
-                    consecutiveLoudSeconds += 1
                 }
-                if consecutiveLoudSeconds >= 2 {
-                    hasPriorSnoringPattern = true
-                }
+                consecutiveLoudSeconds += 1
             } else if db <= silenceUpperBoundDb {
-                consecutiveLoudSeconds = 0
-                if hasPriorSnoringPattern && silenceStart == nil {
+                // 静寂の「直前」が2秒以上のいびきだった場合のみ候補区間を開始（毎回判定）
+                if silenceStart == nil && consecutiveLoudSeconds >= 2 {
                     silenceStart = sec
                 }
+                consecutiveLoudSeconds = 0
             } else {
                 // 中間音量（通常呼吸）の場合は無呼吸ポーズをリセット
                 consecutiveLoudSeconds = 0

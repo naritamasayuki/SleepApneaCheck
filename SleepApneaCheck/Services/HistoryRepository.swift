@@ -38,17 +38,31 @@ final class HistoryRepository: Sendable {
         self.audioDirectoryURL = baseDir.appendingPathComponent("Recordings", isDirectory: true)
     }
 
-    /// 録音ファイル保存用のディレクトリURLを取得（必要に応じて作成）
+    /// 録音ファイル保存用のディレクトリURLを取得（必要に応じて作成・iCloudバックアップ除外）
     func ensureAudioDirectoryURL() throws -> URL {
         do {
             if !FileManager.default.fileExists(atPath: audioDirectoryURL.path) {
                 try FileManager.default.createDirectory(at: audioDirectoryURL, withIntermediateDirectories: true)
             }
+            // 一晩数十〜100MBの録音を iCloud バックアップ対象から外す
+            var dirURL = audioDirectoryURL
+            var values = URLResourceValues()
+            values.isExcludedFromBackup = true
+            try? dirURL.setResourceValues(values)
             return audioDirectoryURL
         } catch {
             logger.error("録音ディレクトリ作成失敗: \(error.localizedDescription)")
             throw HistoryRepositoryError.directoryCreationFailed(error)
         }
+    }
+
+    /// 履歴に紐づかない孤立録音ファイルを列挙する
+    func orphanedAudioFileURLs(referencedFileNames: Set<String>) -> [URL] {
+        guard let urls = try? FileManager.default.contentsOfDirectory(
+            at: audioDirectoryURL,
+            includingPropertiesForKeys: nil
+        ) else { return [] }
+        return urls.filter { $0.pathExtension == "m4a" && !referencedFileNames.contains($0.lastPathComponent) }
     }
 
     /// 録音ファイル名からフルURLを解決する
@@ -100,7 +114,7 @@ final class HistoryRepository: Sendable {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             let data = try encoder.encode(storeData)
-            try data.write(to: fileURL, options: [.atomic])
+            try data.write(to: fileURL, options: [.atomic, .completeFileProtectionUnlessOpen])
         } catch {
             logger.error("履歴データ保存失敗: \(error.localizedDescription)")
             throw HistoryRepositoryError.saveFailed(error)
